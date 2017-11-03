@@ -61,6 +61,7 @@ public class Score extends JPanel {
 	boolean opak = false;
 	boolean def = false;
 	boolean prvni = true;
+	boolean alternativni = true;
 	Integer[] cisla;
 	List<Vrchol> puvod = new ArrayList<Vrchol>();
 
@@ -370,7 +371,7 @@ public class Score extends JPanel {
 				for (Vrchol vrchol : vrch) {
 					vrchol.setID2();
 				}
-				btAlternative.setVisible(true);
+				showAlternative();
 				return;
 			}
 
@@ -389,7 +390,7 @@ public class Score extends JPanel {
 		for (Vrchol vrchol : vrch) {
 			vrchol.setID2();
 		}
-		btAlternative.setVisible(true);
+		showAlternative();
 	}
 
 	// rozdìlení hran mezi vrcholy
@@ -584,5 +585,18 @@ public class Score extends JPanel {
 		btn[0] = souvisly1;btn[1] = souvisly2;btn[2] = rovinny1;btn[3] = rovinny2;btn[4] = euler1;
 		btn[5] = euler2;btn[6] = strom1;btn[7] = strom2;btn[8] = komp1;btn[9] = komp2;
 		return btn;
+	}
+	
+	private void showAlternative() {
+		for (Integer t : cisla) {
+			if(t==2) {
+				alternativni = true;
+			} else {
+				alternativni = false;
+				btAlternative.setVisible(alternativni);
+				return;
+			}
+		}
+		btAlternative.setVisible(alternativni);
 	}
 }
