@@ -24,7 +24,7 @@ public class NewVertex extends JFrame {
 	public JButton btUloz;
 	private JButton btZavrit;
 	private JButton btPozice;
-	private JPanelImage pnlMapa2;
+	private JPanel pnlMapa2;
 	private int polohaX;
 	private int polohaY;
 	private JPanel pnlNorth = new JPanel(new FlowLayout());
@@ -68,6 +68,8 @@ public class NewVertex extends JFrame {
 				dispose();
 				pomocna = 1; //
 				main.vykresliHranu();
+				main.clear();
+				main.present();
 			}
 		});
 
@@ -93,7 +95,7 @@ public class NewVertex extends JFrame {
 		});
 	}
 
-	public void setJPanelImage(JPanelImage pnlMapa) {
+	public void setJPanelImage(JPanel pnlMapa) {
 		this.pnlMapa2 = pnlMapa;
 	}
 

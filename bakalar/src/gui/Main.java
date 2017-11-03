@@ -37,7 +37,7 @@ import tools.MemMapaService;
 public class Main extends JFrame {
 
 	private MapaService mapaservice;
-	static private JPanelImage pnlMapa;
+	private JPanel pnlMapa;
 	JPanel pnlTlacitka = new JPanel();
 	private int sirka = 1136;
 	private int vyska = 856;
@@ -96,10 +96,11 @@ public class Main extends JFrame {
 
 	public void vytvorGui() {
 
-		pnlMapa = (new JPanelImage(sirka, vyska));
+		pnlMapa = new JPanel();
+		pnlMapa.setPreferredSize(new Dimension(sirka + 10, vyska + 10));
 		hlavni = new JPanel();
 		hlavni.setVisible(false);
-		izo = new Izomorfism(main);
+		izo = new Izomorfism(main, btIzomor);
 		hlavni.add(izo);
 		add(pnlMapa, "Center");
 		score = new Score(btScore,this);
@@ -321,7 +322,6 @@ public class Main extends JFrame {
 				o.setMapaService(mapaservice);
 				o.setJPanelImage(pnlMapa);
 				o.setVisible(true);
-
 			}
 		});
 
@@ -369,13 +369,10 @@ public class Main extends JFrame {
 		btIzomor.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				btHome.setVisible(true);
 				pnlMapa.setVisible(false);
-				add(hlavni, "Center");
 				izo.hideshowBTN(main, false, 0);
-				hlavni.setVisible(true);
+				izo.aplly(main);
 				disableBTN(btIzomor);
-				score.disablePanel(false);
 			}
 		});
 
@@ -403,6 +400,7 @@ public class Main extends JFrame {
 				disableBTN(btScore);
 			}
 		});
+		
 
 		hrany.setBounds(20, 750, 170, 25);
 		hrany.setEnabled(false);
