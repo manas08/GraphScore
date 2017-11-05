@@ -2,15 +2,20 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+
 import entity.Hrana;
 import entity.Vrchol;
 import tools.MapaService;
 import tools.MemMapaService;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -22,11 +27,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-public class Izomorfism extends JPanel  {
-
-
+public class Izomorfism extends JPanel {
 
 	BufferedImage image1;
 	BufferedImage image2;
@@ -35,16 +40,18 @@ public class Izomorfism extends JPanel  {
 	JPanel p3;
 	JButton btNewScore;
 	JPanel pnlTlacitka;
-	public Hrana hrana = new Hrana();
-	private MapaService mapaservice;
+	public Hrana hrana1 = new Hrana();
+	private MapaService mapaservice1;
+	public Hrana hrana2 = new Hrana();
+	private MapaService mapaservice2;
 	Vrchol vrchol;
 	Vrchol v1;
 	Main hlavni;
 	ToolBar tb;
-	private int sirka = 1136;
-	private int vyska = 856;
-	int hran = 0;
-	int vrcholu = 0;
+	int hran1 = 0;
+	int vrcholu1 = 0;
+	int hran2 = 0;
+	int vrcholu2 = 0;
 	int poradi = 0;
 	int citlivost = 9;
 	boolean pomoc = false;
@@ -56,22 +63,24 @@ public class Izomorfism extends JPanel  {
 
 	public Izomorfism(Main main, JButton izom) {
 
-		setSize(800,400);	
-		
+		setSize(800, 400);
+
 		p1 = new JPanel();
 		p2 = new JPanel();
 		p3 = new JPanel();
-		
-		add(p1,"West");
-		add(p2,"East");
+
+		add(p1, "West");
+		add(p2, "East");
 		setVisible(true);
 
-		
-		mapaservice = new MemMapaService();
-		image1 = new BufferedImage(563, 866, BufferedImage.TYPE_INT_RGB);
-		image2 = new BufferedImage(563, 866, BufferedImage.TYPE_INT_RGB);
+		mapaservice1 = new MemMapaService();
+		mapaservice2 = new MemMapaService();
+		image1 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
+		image2 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
 		btNewScore = new JButton("Zadat skóre");
-		
+		p1.setPreferredSize(new Dimension(563, 856));
+		p2.setPreferredSize(new Dimension(563, 856));
+
 		// prvotní pøekreslení když pohneme myší
 		izom.addMouseMotionListener(new MouseMotionListener() {
 
@@ -98,12 +107,18 @@ public class Izomorfism extends JPanel  {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				if (SwingUtilities.isLeftMouseButton(e) && pomoc == true) {
+				if (SwingUtilities.isLeftMouseButton(e) && pomoc == true && e.getSource() == p1) {
 					clear();
-					v1 = mapaservice.getPodleId(poradi);
+					v1 = mapaservice1.getPodleId(poradi);
 					v1.setX(e.getX());
 					v1.setY(e.getY());
-					present();
+					present1();
+				} else if (SwingUtilities.isLeftMouseButton(e) && pomoc == true && e.getSource() == p2) {
+					clear();
+					v1 = mapaservice2.getPodleId(poradi);
+					v1.setX(e.getX());
+					v1.setY(e.getY());
+					present2();
 				}
 
 			}
@@ -123,29 +138,63 @@ public class Izomorfism extends JPanel  {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (SwingUtilities.isLeftMouseButton(e)) {
-					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
-						vrchol = mapaservice.getVrchol().get(i);
+				if (SwingUtilities.isLeftMouseButton(e) && e.getSource() == p1) {
+					for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
+						vrchol = mapaservice1.getVrchol().get(i);
 
-						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY())) && (((vrchol.getX() - citlivost) <= e.getX()) && (((vrchol.getX() + citlivost) >= e.getX())))) {
+						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY()))
+								&& (((vrchol.getX() - citlivost) <= e.getX())
+										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
+							poradi = vrchol.getId();
+							pomoc = true;
+						}
+					}
+				} else if (SwingUtilities.isLeftMouseButton(e) && e.getSource() == p2) {
+					for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
+						vrchol = mapaservice2.getVrchol().get(i);
+
+						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY()))
+								&& (((vrchol.getX() - citlivost) <= e.getX())
+										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							poradi = vrchol.getId();
 							pomoc = true;
 						}
 					}
 				}
 
-				else if (e.getButton() == MouseEvent.BUTTON3) {
+				else if (e.getButton() == MouseEvent.BUTTON3 && e.getSource() == p1) {
 					int citlivost = 9;
-					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
-						Vrchol m = mapaservice.getVrchol().get(i);
+					for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
+						Vrchol m = mapaservice1.getVrchol().get(i);
 						int tbPolohaX = MouseInfo.getPointerInfo().getLocation().x;
 						int tbPolohaY = MouseInfo.getPointerInfo().getLocation().y;
 
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+								&& (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
 
-							tb = new ToolBar(m, main, hrana, 1);
-							//tb.score(getScore());
-							tb.setMapaService(mapaservice);
+							tb = new ToolBar(m, main, hrana1, 1);
+							// tb.score(getScore());
+							tb.setMapaService(mapaservice1);
+							tb.setVisible(true);
+							tb.setLocation(tbPolohaX + 15, tbPolohaY + 15);
+
+						}
+					}
+				}
+
+				else if (e.getButton() == MouseEvent.BUTTON3 && e.getSource() == p2) {
+					int citlivost = 9;
+					for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
+						Vrchol m = mapaservice2.getVrchol().get(i);
+						int tbPolohaX = MouseInfo.getPointerInfo().getLocation().x;
+						int tbPolohaY = MouseInfo.getPointerInfo().getLocation().y;
+
+						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+								&& (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+
+							tb = new ToolBar(m, main, hrana2, 1);
+							// tb.score(getScore());
+							tb.setMapaService(mapaservice2);
 							tb.setVisible(true);
 							tb.setLocation(tbPolohaX + 15, tbPolohaY + 15);
 
@@ -184,30 +233,29 @@ public class Izomorfism extends JPanel  {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 			}
 		});
 
 		// ------Umístìní tlaèítek--------
 		btNewScore.setBounds(40, 400, 120, 25);
 
-		mapaservice.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null));
-		mapaservice.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null));
-		mapaservice.pridejVrchol(new Vrchol(600, 320, "C", "Budova C", null));
-		mapaservice.pridejVrchol(new Vrchol(10, 507, "D", "Budova FIM J", null));
+		mapaservice1.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null));
+		mapaservice1.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null));
+		mapaservice1.pridejVrchol(new Vrchol(160, 507, "C", "Budova FIM J", null));
 		p3.add(p1, "East");
 		p3.add(p2, "West");
 	}
 
 	public void hideshowBTN(Main main, boolean b, int i) {
 		for (JButton btn : main.getBTN()) {
-			if(i == 1 && btn.getText()=="Zobrazit vlastnosti"){
-				
-			}else
+			if (i == 1 && btn.getText() == "Zobrazit vlastnosti") {
+
+			} else
 				btn.setVisible(b);
 		}
 	}
-	
+
 	public void aplly(Main main) {
 		hlavni = main;
 		hlavni.add(p3, "Center");
@@ -222,17 +270,13 @@ public class Izomorfism extends JPanel  {
 
 		clear();
 	}
-	
-
-
-	
 
 	// samotné vykreslení bodù a hran
-	public void vykresliHranu() {
+	public void vykresliHranu1() {
 		Graphics2D gr = image1.createGraphics();
 
-		for (int i = 0; i < hrana.getList().size(); i++) {
-			Hrana h = hrana.getList().get(i);
+		for (int i = 0; i < hrana1.getList().size(); i++) {
+			Hrana h = hrana1.getList().get(i);
 			if (h != null) {
 				gr.setStroke(new BasicStroke(4));
 				gr.setColor(new Color(165, 49, 68));
@@ -240,38 +284,77 @@ public class Izomorfism extends JPanel  {
 				gr.drawLine(h.getPrvni().getX(), h.getPrvni().getY(), h.getDruhy().getX(), h.getDruhy().getY());
 			}
 		}
-		System.out.println("erger");
-		for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
-			Vrchol m = mapaservice.getVrchol().get(i);
-			System.out.println(mapaservice.getVrchol().get(i).getNazev());
+		for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
+			Vrchol m = mapaservice1.getVrchol().get(i);
 			m.paint(gr, m);
 		}
 
-		hran = hrana.getList().size();
-		vrcholu = mapaservice.getVrchol().size();
-		hlavni.setCounts(hran, vrcholu);
+		gr.setFont(new Font("TimesRoman", Font.BOLD, 18));
+		gr.setColor(Color.BLACK);
+		gr.drawString("Graf 1:", 30, 30);
+
+		hran1 = hrana1.getList().size();
+		vrcholu1 = mapaservice1.getVrchol().size();
+		hlavni.setCounts(hran1, vrcholu1);
+	}
+
+	// samotné vykreslení bodù a hran
+	public void vykresliHranu2() {
+		Graphics2D gr = image2.createGraphics();
+
+		for (int i = 0; i < hrana2.getList().size(); i++) {
+			Hrana h = hrana2.getList().get(i);
+			if (h != null) {
+				gr.setStroke(new BasicStroke(4));
+				gr.setColor(new Color(165, 49, 68));
+				gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				gr.drawLine(h.getPrvni().getX(), h.getPrvni().getY(), h.getDruhy().getX(), h.getDruhy().getY());
+			}
+		}
+		for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
+			Vrchol m = mapaservice2.getVrchol().get(i);
+			m.paint(gr, m);
+		}
+
+		gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		gr.setFont(new Font("TimesRoman", Font.BOLD, 18));
+		gr.setColor(Color.BLACK);
+		gr.drawString("Graf 2:", 30, 30);
+
+		hran2 = hrana2.getList().size();
+		vrcholu2 = mapaservice2.getVrchol().size();
+		hlavni.setCounts(hran2, vrcholu2);
 	}
 
 	// metoda pro vykreslení
 	public void present() {
-		vykresliHranu();
-		if (p1.getGraphics() != null)
-			p1.getGraphics().drawImage(image1, 0, 0, null);
-		vykresliHranu();
-		if (p2.getGraphics() != null)
-			p2.getGraphics().drawImage(image2, 0, 0, null);
+		present1();
+		present2();
+	}
+	
+	public void present1() {
+		Graphics gr = p1.getGraphics();
+		vykresliHranu1();
+		if (gr != null)
+			gr.drawImage(image1, 0, 0, null);
+	}
+	
+	public void present2() {
+		Graphics gr = p2.getGraphics();
+		vykresliHranu2();
+		if (gr != null)
+			gr.drawImage(image2, 0, 0, null);
 	}
 
 	// vyèištìní plochy
 	public void clear() {
 		Graphics gr = image1.getGraphics();
-		gr.setColor(new Color(238, 238, 238));
+		gr.setColor(new Color(192, 192, 192));
 		gr.fillRect(0, 0, image1.getWidth(), image1.getHeight());
 		gr = image2.getGraphics();
-		gr.setColor(new Color(238, 238, 238));
+		gr.setColor(new Color(192, 192, 192));
 		gr.fillRect(0, 0, image2.getWidth(), image2.getHeight());
 	}
-
 
 	public void disablePanel(boolean b) {
 		btNewScore.setVisible(false);

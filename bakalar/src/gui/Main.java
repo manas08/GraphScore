@@ -75,7 +75,7 @@ public class Main extends JFrame {
 	List<JButton> btns = new ArrayList<>();
 
 	public Main() {
-		super("GraphScore 1.1.5");
+		super("GraphScore 1.1.7");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		mapaservice = new MemMapaService();
