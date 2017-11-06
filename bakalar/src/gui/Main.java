@@ -372,6 +372,7 @@ public class Main extends JFrame {
 				pnlMapa.setVisible(false);
 				izo.hideshowBTN(main, false, 0);
 				izo.aplly(main);
+				score.disablePanel(false);
 				disableBTN(btIzomor);
 			}
 		});
@@ -387,6 +388,7 @@ public class Main extends JFrame {
 				okno = 1;
 				disableBTN(btHome);
 				score.disablePanel(false);
+				ableCounts(true);
 			}
 		});
 
@@ -396,8 +398,9 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pnlMapa.setVisible(false);
 				izo.hideshowBTN(main, false, 0);
-				score.aplly(main, btScore,1);
+				score.aplly(main, btScore);
 				disableBTN(btScore);
+				ableCounts(true);
 			}
 		});
 		
@@ -589,6 +592,11 @@ public class Main extends JFrame {
 		else
 			btn[7].setText("NE");
 			
+	}
+	
+	public void ableCounts(boolean b) {
+		hrany.setVisible(b);
+		vrcholy.setVisible(b);
 	}
 
 }

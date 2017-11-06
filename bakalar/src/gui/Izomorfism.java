@@ -38,7 +38,7 @@ public class Izomorfism extends JPanel {
 	JPanel p1;
 	JPanel p2;
 	JPanel p3;
-	JButton btNewScore;
+	JButton btNewVertex;
 	JPanel pnlTlacitka;
 	public Hrana hrana1 = new Hrana();
 	private MapaService mapaservice1;
@@ -77,7 +77,7 @@ public class Izomorfism extends JPanel {
 		mapaservice2 = new MemMapaService();
 		image1 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
 		image2 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
-		btNewScore = new JButton("Zadat skóre");
+		btNewVertex = new JButton("Vložit nový vrchol");
 		p1.setPreferredSize(new Dimension(563, 856));
 		p2.setPreferredSize(new Dimension(563, 856));
 
@@ -228,8 +228,8 @@ public class Izomorfism extends JPanel {
 		p2.addMouseListener(ml);
 
 		// -------Tlaèítka---------
-		btNewScore.setPreferredSize(new Dimension(170, 25));
-		btNewScore.addActionListener(new ActionListener() {
+		btNewVertex.setPreferredSize(new Dimension(170, 25));
+		btNewVertex.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -238,7 +238,7 @@ public class Izomorfism extends JPanel {
 		});
 
 		// ------Umístìní tlaèítek--------
-		btNewScore.setBounds(40, 400, 120, 25);
+		btNewVertex.setBounds(40, 400, 120, 25);
 
 		mapaservice1.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null));
 		mapaservice1.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null));
@@ -261,13 +261,13 @@ public class Izomorfism extends JPanel {
 		hlavni.add(p3, "Center");
 		pomoc = true;
 		this.pnlTlacitka = hlavni.getPanel();
-		btNewScore.setVisible(true);
+		btNewVertex.setVisible(true);
 
 		if (prvni == true) {
-			pnlTlacitka.add(btNewScore);
+			pnlTlacitka.add(btNewVertex);
 			prvni = false;
 		}
-
+		hlavni.ableCounts(false);
 		clear();
 	}
 
@@ -296,6 +296,10 @@ public class Izomorfism extends JPanel {
 		hran1 = hrana1.getList().size();
 		vrcholu1 = mapaservice1.getVrchol().size();
 		hlavni.setCounts(hran1, vrcholu1);
+		gr.setFont(new Font("TimesRoman", Font.BOLD, 12));
+		gr.drawString("Poèet hran:  " + "  " + hran1, 30, 820);
+		gr.setFont(new Font("TimesRoman", Font.BOLD, 12));
+		gr.drawString("Poèet vrcholù:  " + "  " + vrcholu1, 30, 840);
 	}
 
 	// samotné vykreslení bodù a hran
@@ -323,7 +327,10 @@ public class Izomorfism extends JPanel {
 
 		hran2 = hrana2.getList().size();
 		vrcholu2 = mapaservice2.getVrchol().size();
-		hlavni.setCounts(hran2, vrcholu2);
+		gr.setFont(new Font("TimesRoman", Font.BOLD, 12));
+		gr.drawString("Poèet hran:  " + "  " + hran2, 30, 820);
+		gr.setFont(new Font("TimesRoman", Font.BOLD, 12));
+		gr.drawString("Poèet vrcholù:  " + "  " + vrcholu2, 30, 840);
 	}
 
 	// metoda pro vykreslení
@@ -357,7 +364,7 @@ public class Izomorfism extends JPanel {
 	}
 
 	public void disablePanel(boolean b) {
-		btNewScore.setVisible(false);
+		btNewVertex.setVisible(false);
 	}
 
 }

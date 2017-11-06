@@ -217,11 +217,11 @@ public class Score extends JPanel {
 		vytvorGUI();
 	}
 
-	public void aplly(Main main, JButton score, int o) {
+	public void aplly(Main main, JButton score) {
 		hlavni = main;
-		if (o == 1) {
-			hlavni.add(panel, "Center");
-		}
+		hlavni.repaint();
+		hlavni.add(panel, "Center");
+		
 		pomoc = true;
 		this.pnlTlacitka = hlavni.getPanel();
 		btNewScore.setVisible(true);
@@ -283,7 +283,7 @@ public class Score extends JPanel {
 	// metoda pro vykreslení
 	public void present() {
 		vykresliHranu();
-		if (panel.getGraphics() != null)
+		//if (panel.getGraphics() != null)
 			panel.getGraphics().drawImage(image, 0, 0, null);
 	}
 
