@@ -64,6 +64,7 @@ public class Score extends JPanel {
 	boolean alternativni = true;
 	Integer[] cisla;
 	List<Vrchol> puvod = new ArrayList<Vrchol>();
+	MouseListener ml;
 
 	public Score(JButton score, Main main) {
 		panel = new JPanel();
@@ -71,9 +72,17 @@ public class Score extends JPanel {
 		image = new BufferedImage(sirka + 10, vyska + 10, BufferedImage.TYPE_INT_RGB);
 		btNewScore = new JButton("Zadat skóre");
 		btAlternative = new JButton("Alternativní graf");
-		souvisly1 = new JTextField("Souvislý?");  rovinny1 = new JTextField("Rovinný?");   euler1 = new JTextField("Eulerovský?");  strom1 = new JTextField("Strom?");  komp1 = new JTextField("Poèet komponent?");
-		souvisly2 = new JTextField("");		   	  rovinny2 = new JTextField("");		   euler2 = new JTextField("");		        strom2 = new JTextField("");	    komp2 = new JTextField("");
-		
+		souvisly1 = new JTextField("Souvislý?");
+		rovinny1 = new JTextField("Rovinný?");
+		euler1 = new JTextField("Eulerovský?");
+		strom1 = new JTextField("Strom?");
+		komp1 = new JTextField("Poèet komponent?");
+		souvisly2 = new JTextField("");
+		rovinny2 = new JTextField("");
+		euler2 = new JTextField("");
+		strom2 = new JTextField("");
+		komp2 = new JTextField("");
+
 		// prvotní pøekreslení když pohneme myší
 		score.addMouseMotionListener(new MouseMotionListener() {
 
@@ -117,7 +126,7 @@ public class Score extends JPanel {
 
 		};
 
-		MouseListener ml = new MouseListener() {
+		ml = new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -126,11 +135,14 @@ public class Score extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				System.out.println("score");
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
 						vrchol = mapaservice.getVrchol().get(i);
 
-						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY())) && (((vrchol.getX() - citlivost) <= e.getX()) && (((vrchol.getX() + citlivost) >= e.getX())))) {
+						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY()))
+								&& (((vrchol.getX() - citlivost) <= e.getX())
+										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							poradi = vrchol.getId();
 							pomoc = true;
 						}
@@ -144,7 +156,8 @@ public class Score extends JPanel {
 						int tbPolohaX = MouseInfo.getPointerInfo().getLocation().x;
 						int tbPolohaY = MouseInfo.getPointerInfo().getLocation().y;
 
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+								&& (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
 
 							tb = new ToolBar(m, main, hrana, 1);
 							tb.score(getScore());
@@ -221,7 +234,7 @@ public class Score extends JPanel {
 		hlavni = main;
 		hlavni.repaint();
 		hlavni.add(panel, "Center");
-		
+
 		pomoc = true;
 		this.pnlTlacitka = hlavni.getPanel();
 		btNewScore.setVisible(true);
@@ -283,8 +296,8 @@ public class Score extends JPanel {
 	// metoda pro vykreslení
 	public void present() {
 		vykresliHranu();
-		//if (panel.getGraphics() != null)
-			panel.getGraphics().drawImage(image, 0, 0, null);
+		// if (panel.getGraphics() != null)
+		panel.getGraphics().drawImage(image, 0, 0, null);
 	}
 
 	// vyèištìní plochy
@@ -478,6 +491,9 @@ public class Score extends JPanel {
 		euler2.setVisible(b);
 		strom2.setVisible(b);
 		komp2.setVisible(b);
+		if (b == false)
+			if (hlavni != null)
+				hlavni.remove(panel); // øeší pøepínání mouselisteneru
 	}
 
 	public void setFeatures() {
@@ -582,14 +598,22 @@ public class Score extends JPanel {
 
 	public JTextField[] getBTNs() {
 		JTextField[] btn = new JTextField[10];
-		btn[0] = souvisly1;btn[1] = souvisly2;btn[2] = rovinny1;btn[3] = rovinny2;btn[4] = euler1;
-		btn[5] = euler2;btn[6] = strom1;btn[7] = strom2;btn[8] = komp1;btn[9] = komp2;
+		btn[0] = souvisly1;
+		btn[1] = souvisly2;
+		btn[2] = rovinny1;
+		btn[3] = rovinny2;
+		btn[4] = euler1;
+		btn[5] = euler2;
+		btn[6] = strom1;
+		btn[7] = strom2;
+		btn[8] = komp1;
+		btn[9] = komp2;
 		return btn;
 	}
-	
+
 	private void showAlternative() {
 		for (Integer t : cisla) {
-			if(t==2) {
+			if (t == 2) {
 				alternativni = true;
 			} else {
 				alternativni = false;

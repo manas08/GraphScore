@@ -57,7 +57,6 @@ public class Main extends JFrame {
 	BufferedImage image;
 	int mys1X;
 	int mys1Y;
-	JPanel hlavni;
 	boolean podm = false;
 	int okno = 0;
 	Score score;
@@ -75,7 +74,7 @@ public class Main extends JFrame {
 	List<JButton> btns = new ArrayList<>();
 
 	public Main() {
-		super("GraphScore 1.1.7");
+		super("GraphScore 1.1.9");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		mapaservice = new MemMapaService();
@@ -98,10 +97,7 @@ public class Main extends JFrame {
 
 		pnlMapa = new JPanel();
 		pnlMapa.setPreferredSize(new Dimension(sirka + 10, vyska + 10));
-		hlavni = new JPanel();
-		hlavni.setVisible(false);
 		izo = new Izomorfism(main, btIzomor);
-		hlavni.add(izo);
 		add(pnlMapa, "Center");
 		score = new Score(btScore,this);
 		score.setVisible(false);
@@ -109,9 +105,7 @@ public class Main extends JFrame {
 		pnlTlacitka.setLayout(null);
 		pnlTlacitka.setPreferredSize(new Dimension(200, vyska));
 		pnlTlacitka.setVisible(true);
-		pnlTlacitka.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 5)); // 107,
-																						// 104,
-																						// 104
+		pnlTlacitka.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 5));
 
 		mapaservice.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null));
 		mapaservice.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null));
@@ -140,21 +134,25 @@ public class Main extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				if (podm == true) {
+				if (btIzomor.isEnabled()==false) {
+					podm = false;
+					izo.present();
+				} else if (podm == true && btHome.isEnabled()==false) {
 					podm = false;
 					present();
+				} else if (btScore.isEnabled()==false) {
+					podm = false;
+					score.present();
 				}
 			}
 		});
@@ -317,7 +315,7 @@ public class Main extends JFrame {
 		btPridat.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				NewVertex o = new NewVertex(main);
+				NewVertex o = new NewVertex(main, izo, 1);
 				o.setLocationRelativeTo(null);
 				o.setMapaService(mapaservice);
 				o.setJPanelImage(pnlMapa);
@@ -369,10 +367,10 @@ public class Main extends JFrame {
 		btIzomor.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				score.disablePanel(false);
 				pnlMapa.setVisible(false);
 				izo.hideshowBTN(main, false, 0);
 				izo.aplly(main);
-				score.disablePanel(false);
 				disableBTN(btIzomor);
 			}
 		});
@@ -383,12 +381,12 @@ public class Main extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				izo.hideshowBTN(main, true, 0);
-				hlavni.setVisible(false);
 				pnlMapa.setVisible(true);
 				okno = 1;
 				disableBTN(btHome);
 				score.disablePanel(false);
 				ableCounts(true);
+				izo.disIzo();
 			}
 		});
 
@@ -396,6 +394,7 @@ public class Main extends JFrame {
 		btScore.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				izo.disIzo();
 				pnlMapa.setVisible(false);
 				izo.hideshowBTN(main, false, 0);
 				score.aplly(main, btScore);

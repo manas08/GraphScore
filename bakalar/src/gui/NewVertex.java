@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import entity.Vrchol;
 import tools.MapaService;
@@ -35,14 +36,16 @@ public class NewVertex extends JFrame {
 	public String tbPopis;
 	public String tbId;
 	public String s1 = "";
-	private int pomocna; // pri vytvoreni nastavena na 0
+	private Izomorfism izo;
+	private boolean pomocna = false; // pri vytvoreni nastavena na false
 
-	public NewVertex(Main main) {
+	public NewVertex(Main main, Izomorfism izo, int which) {
 		super("Nový vrchol");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(450, 250);
 		setResizable(false);
-
+		this.izo=izo;
+		
 		getContentPane().add(pnlNorth, "North");
 		getContentPane().add(pnlCenter, "Center");
 		getContentPane().add(pnlSouth, "South");
@@ -66,10 +69,20 @@ public class NewVertex extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				pomocna = 1; //
-				main.vykresliHranu();
-				main.clear();
-				main.present();
+				pomocna = true; //
+				if(which==1) {
+					main.vykresliHranu();
+					main.clear();
+					main.present();
+				} else if(which==2) {
+					izo.vykresliHranu1();
+					izo.clear1();
+					izo.present1();
+				} else if(which==3) {
+					izo.vykresliHranu2();
+					izo.clear2();
+					izo.present2();
+				} 
 			}
 		});
 
@@ -82,8 +95,8 @@ public class NewVertex extends JFrame {
 				tfText1.setEditable(false);
 				btPozice.setVisible(false);
 				main.toFront();
+				
 				urciPolohu();
-
 			};
 		});
 
@@ -124,10 +137,10 @@ public class NewVertex extends JFrame {
 				polohaY = (int) e.getY() - 4;
 
 				tfText1.setText("X:" + " " + polohaX + " " + "Y:" + " " + polohaY);
-				if (pomocna == 0) {
+				if (pomocna == false) {
 					setVisible(true);
 				}
-				if (pomocna == 1) {
+				if (pomocna == true) {
 					setVisible(false);
 				}
 			}
@@ -148,7 +161,7 @@ public class NewVertex extends JFrame {
 
 		} else {
 			btUloz.setEnabled(false);
-			pomocna = 1;
+			pomocna = true;
 
 			mapaservice2.pridejVrchol(
 					new Vrchol(polohaX, polohaY, tfNazevVrcholu.getText(), tfPopisVrcholu.getText(), null));

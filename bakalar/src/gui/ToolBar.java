@@ -23,6 +23,7 @@ public class ToolBar extends JFrame {
 	private String nazevBodu;
 	private int tbID;
 	Score score;
+	Izomorfism izo;
 
 	public ToolBar(Vrchol m, Main main, Hrana hrana, int i) {
 		super("Detaily bodu");
@@ -61,6 +62,12 @@ public class ToolBar extends JFrame {
 						score.clear();
 						score.present();
 						score.refresh();
+					}else if (i == 2){
+						izo.clear1();
+						izo.present1();
+					}else if (i == 3){
+						izo.clear2();
+						izo.present2();
 					}
 					setVisible(false);
 				}
@@ -81,5 +88,9 @@ public class ToolBar extends JFrame {
 
 	public void score(Score sc) {
 		this.score=sc;
+	}
+
+	public void izo(Izomorfism iz) {
+		this.izo=iz;
 	}
 }
