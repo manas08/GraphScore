@@ -76,7 +76,7 @@ public class Score extends JPanel {
 		rovinny1 = new JTextField("Rovinný?");
 		euler1 = new JTextField("Eulerovský?");
 		strom1 = new JTextField("Strom?");
-		komp1 = new JTextField("Poèet komponent?");
+		komp1 = new JTextField("");
 		souvisly2 = new JTextField("");
 		rovinny2 = new JTextField("");
 		euler2 = new JTextField("");
@@ -260,8 +260,8 @@ public class Score extends JPanel {
 			pnlTlacitka.add(euler2);
 			pnlTlacitka.add(strom1);
 			pnlTlacitka.add(strom2);
-			pnlTlacitka.add(komp1);
-			pnlTlacitka.add(komp2);
+			//pnlTlacitka.add(komp1);
+			//pnlTlacitka.add(komp2);
 			prvni = false;
 			btAlternative.setVisible(false);
 		}

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 public class Izomorfism extends JPanel {
 
@@ -35,7 +36,10 @@ public class Izomorfism extends JPanel {
 	JPanel p2;
 	JPanel p3;
 	JButton btNewVertex;
-	JButton btNewEdge;
+	JButton btNewGraph;
+	JButton btDelHrany;
+	JButton btDelHranu;
+	JButton btStejne;
 	JPanel pnlTlacitka;
 	JRadioButton graph1 = new JRadioButton("Graf 1");
 	JRadioButton graph2 = new JRadioButton("Graf 2");
@@ -84,7 +88,10 @@ public class Izomorfism extends JPanel {
 		image1 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
 		image2 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
 		btNewVertex = new JButton("Vložit nový vrchol");
-		btNewEdge = new JButton("Vložit nový vrchol");
+		btNewGraph = new JButton("Nový graf");
+		btDelHrany = new JButton("Odstraò všechny hrany");
+		btDelHranu = new JButton("Odstraò hranu");
+		btStejne = new JButton("Jsou izomorfní?");
 		p1.setPreferredSize(new Dimension(563, 856));
 		p2.setPreferredSize(new Dimension(563, 856));
 
@@ -115,20 +122,20 @@ public class Izomorfism extends JPanel {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				if (SwingUtilities.isMiddleMouseButton(e) && pomoc == true && e.getSource() == p1) {
-					clear();
+					clear1();
 					v1 = mapaservice1.getPodleId(poradi);
 					v1.setX(e.getX());
 					v1.setY(e.getY());
 					present1();
 				} else if (SwingUtilities.isMiddleMouseButton(e) && pomoc == true && e.getSource() == p2) {
-					clear();
+					clear2();
 					v1 = mapaservice2.getPodleId(poradi);
 					v1.setX(e.getX());
 					v1.setY(e.getY());
 					present2();
 				} else if (pocet == 1) {
-					clear();
 					if (SwingUtilities.isLeftMouseButton(e) && e.getSource() == p1) {
+						clear1();
 						Graphics2D gr = image1.createGraphics();
 						int mys2X = e.getX();
 						int mys2Y = e.getY();
@@ -136,10 +143,8 @@ public class Izomorfism extends JPanel {
 						gr.setColor(new Color(165, 49, 68));
 						gr.drawLine(mys1X, mys1Y, mys2X, mys2Y);
 						present1();
-					}
-				} else if (pocet == 1) {
-					clear();
-					if (SwingUtilities.isLeftMouseButton(e) && e.getSource() == p2) {
+					} else if (SwingUtilities.isLeftMouseButton(e) && e.getSource() == p2) {
+						clear2();
 						Graphics2D gr = image2.createGraphics();
 						int mys2X = e.getX();
 						int mys2Y = e.getY();
@@ -277,6 +282,7 @@ public class Izomorfism extends JPanel {
 							mys1X = e.getX();
 							mys1Y = e.getY();
 							pocet = 1;
+							System.out.println("dwdw");
 						}
 					}
 				} else if (SwingUtilities.isMiddleMouseButton(e) && e.getSource() == p1) {
@@ -386,23 +392,78 @@ public class Izomorfism extends JPanel {
 			}
 		});
 		
-		btNewEdge.setPreferredSize(new Dimension(170, 25));
-		btNewEdge.addActionListener(new ActionListener() {
+		btNewGraph.setPreferredSize(new Dimension(170, 25));
+		btNewGraph.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewVertex o = null;
 				if (graphs == false) {
-					o = new NewVertex(hlavni, getIzo(), 2);
-					o.setMapaService(mapaservice1);
-					o.setJPanelImage(p1);
+					hrana1.delete();
+					mapaservice1.smazList();
 				} else if (graphs == true) {
-					o = new NewVertex(hlavni, getIzo(), 3);
-					o.setMapaService(mapaservice2);
-					o.setJPanelImage(p2);
+					hrana2.delete();
+					mapaservice2.smazList();
 				}
-				o.setLocationRelativeTo(null);
-				o.setVisible(true);
+				clear();
+				present();
+			}
+		});
+
+		btDelHrany.setPreferredSize(new Dimension(170, 25));
+		btDelHrany.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if (graphs == false) {
+					hrana1.delete();
+				} else if (graphs == true) {
+					hrana2.delete();
+				}
+				clear();
+				present();
+			}
+		});
+
+		btDelHranu.setPreferredSize(new Dimension(170, 25));
+		btDelHranu.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if (graphs == false) {
+					DelEdge edge = new DelEdge(hrana1);
+					edge.setLocationRelativeTo(null);
+					edge.delete(hrana1, hlavni, getIzo(), 1);
+				} else if (graphs == true) {
+					DelEdge edge = new DelEdge(hrana2);
+					edge.setLocationRelativeTo(null);
+					edge.delete(hrana2, hlavni, getIzo(), 1);
+				}
+			}
+		});
+		
+		btStejne.setPreferredSize(new Dimension(170, 25));
+		btStejne.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				Hrana h1;
+				Hrana h2;
+				int shody = 0;
+				if(mapaservice1.getVrchol().size() == mapaservice2.getVrchol().size() && hrana1.getList().size() == hrana2.getList().size()) {
+					for (int i = 0; i < hrana1.getList().size(); i++) {
+						for (int j = 0; j < hrana2.getList().size(); j++) {
+							h1 = hrana1.getList().get(i);
+							h2 = hrana2.getList().get(i);
+							if(h1.getPrvni().getNazev() == h2.getPrvni().getNazev() && h1.getDruhy().getNazev() == h2.getDruhy().getNazev()) {
+								shody++;
+								j=0;
+								i++;
+							}
+						}
+					}
+					if(shody==hrana1.getList().size()) {
+						JOptionPane.showMessageDialog(null, "Grafy jsou izomorfní.", "Izomorfismus", 1);
+					} else
+						JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+				} else
+					JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
 			}
 		});
 
@@ -426,6 +487,10 @@ public class Izomorfism extends JPanel {
 
 		// ------Umístìní tlaèítek--------
 		btNewVertex.setBounds(15, 440, 165, 25);
+		btNewGraph.setBounds(15, 480, 165, 25);
+		btDelHrany.setBounds(15, 520, 165, 25);
+		btDelHranu.setBounds(15, 560, 165, 25);
+		btStejne.setBounds(15, 600, 165, 25);
 		graph1.setBounds(20, 380, 70, 25);
 		graph2.setBounds(20, 402, 70, 25);
 
@@ -450,6 +515,10 @@ public class Izomorfism extends JPanel {
 		hlavni.repaint();
 		hlavni.add(p3, "Center");
 		btNewVertex.setVisible(true);
+		btNewGraph.setVisible(true);
+		btDelHrany.setVisible(true);
+		btDelHranu.setVisible(true);
+		btStejne.setVisible(true);
 		graph1.setVisible(true);
 		graph2.setVisible(true);
 
@@ -458,6 +527,10 @@ public class Izomorfism extends JPanel {
 
 		if (prvni == true) {
 			pnlTlacitka.add(btNewVertex);
+			pnlTlacitka.add(btNewGraph);
+			pnlTlacitka.add(btDelHrany);
+			pnlTlacitka.add(btDelHranu);
+			pnlTlacitka.add(btStejne);
 			pnlTlacitka.add(graph1);
 			pnlTlacitka.add(graph2);
 			prvni = false;
@@ -574,7 +647,30 @@ public class Izomorfism extends JPanel {
 		if (hlavni != null)
 			hlavni.remove(p3); // øeší pøepínání mouselistenerù
 		btNewVertex.setVisible(false);
+		btNewGraph.setVisible(false);
+		btDelHrany.setVisible(false);
+		btDelHranu.setVisible(false);
+		btStejne.setVisible(false);
 		graph1.setVisible(false);
 		graph2.setVisible(false);
+	}
+
+	public void vykresliHranu(List<Hrana> listPom) {
+		DelEdge edge;
+		if (graphs == false) {
+			hrana1.setList(listPom);
+			edge = new DelEdge(hrana1);
+			edge.setLocationRelativeTo(null);
+			edge.delete(hrana1, hlavni, getIzo(), 1);
+			clear1();
+			present1();
+		} else if (graphs == true) {
+			hrana2.setList(listPom);
+			edge = new DelEdge(hrana2);
+			edge.setLocationRelativeTo(null);
+			edge.delete(hrana2, hlavni, getIzo(), 1);
+			clear2();
+			present2();
+		}
 	}
 }

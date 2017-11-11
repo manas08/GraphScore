@@ -59,6 +59,7 @@ public class Main extends JFrame {
 	int mys1Y;
 	boolean podm = false;
 	int okno = 0;
+	int poradi;
 	Score score;
 	Integer[] cisla;
 	Features features = new Features();
@@ -199,6 +200,16 @@ public class Main extends JFrame {
 							pocet = 1;
 						}
 					}
+				}else if (SwingUtilities.isMiddleMouseButton(e)) {
+					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
+						vrchol = mapaservice.getVrchol().get(i);
+
+						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY()))
+								&& (((vrchol.getX() - citlivost) <= e.getX())
+										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
+							poradi = vrchol.getId();
+						}
+					}
 				}
 			}
 
@@ -259,6 +270,7 @@ public class Main extends JFrame {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
+				Vrchol v1;
 				if (pocet == 1) {
 					clear();
 					if (SwingUtilities.isLeftMouseButton(e)) {
@@ -270,6 +282,12 @@ public class Main extends JFrame {
 						gr.drawLine(mys1X, mys1Y, mys2X, mys2Y);
 						present();
 					}
+				} if (SwingUtilities.isMiddleMouseButton(e)) {
+					clear();
+					v1 = mapaservice.getPodleId(poradi);
+					v1.setX(e.getX());
+					v1.setY(e.getY());
+					present();
 				}
 			}
 
@@ -278,7 +296,7 @@ public class Main extends JFrame {
 			}
 
 		};
-
+		
 		pnlMapa.addMouseMotionListener(mouse);
 
 		btHome.addMouseMotionListener(new MouseMotionListener() {
@@ -340,7 +358,7 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				DelEdge edge = new DelEdge(hrana);
 				edge.setLocationRelativeTo(null);
-				edge.delete(hrana, main);
+				edge.delete(hrana, main, izo, 0);
 			}
 		});
 
@@ -494,7 +512,7 @@ public class Main extends JFrame {
 		present();
 		edge = new DelEdge(hrana);
 		edge.setLocationRelativeTo(null);
-		edge.delete(hrana, main);
+		edge.delete(hrana, main, izo, 0);
 	}
 
 	/**

@@ -26,7 +26,7 @@ public class DelEdge extends JFrame {
 	}
 
 	// ********************************
-	public void delete(Hrana hrana, Main main) {
+	public void delete(Hrana hrana, Main main, Izomorfism izo, int w) {
 		List<JButton> buttons = new ArrayList<>();
 		JLabel uvod = new JLabel("Vyberte hranu k odstranìní:     ");
 		uvod.setBounds(10, 5, 200, 20);
@@ -54,7 +54,10 @@ public class DelEdge extends JFrame {
 							hrana.getList().get(w).getDruhy().setStupen();
 						}
 					}
-					main.vykresliHranu(listPom);
+					if(w==0)
+						main.vykresliHranu(listPom);
+					else if(w==1)
+						izo.vykresliHranu(listPom);
 					setVisible(false);
 					dispose();
 				}
