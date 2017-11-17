@@ -75,7 +75,7 @@ public class Main extends JFrame {
 	List<JButton> btns = new ArrayList<>();
 
 	public Main() {
-		super("GraphScore 1.1.9");
+		super("GraphScore 0.2.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		mapaservice = new MemMapaService();
@@ -160,24 +160,6 @@ public class Main extends JFrame {
 		pnlMapa.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				int citlivost = 9;
-				if (e.getButton() == MouseEvent.BUTTON3) {
-					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
-						Vrchol m = mapaservice.getVrchol().get(i);
-						int tbPolohaX = MouseInfo.getPointerInfo().getLocation().x;
-						int tbPolohaY = MouseInfo.getPointerInfo().getLocation().y;
-
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
-
-							ToolBar tb = new ToolBar(m, main, hrana,0);
-							tb.setMapaService(mapaservice);
-							tb.setVisible(true);
-							tb.setLocation(tbPolohaX + 15, tbPolohaY + 15);
-							tb.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-						}
-					}
-				}
 			}
 
 			public void mouseEntered(MouseEvent e) {
@@ -210,7 +192,23 @@ public class Main extends JFrame {
 							poradi = vrchol.getId();
 						}
 					}
-				}
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
+						Vrchol m = mapaservice.getVrchol().get(i);
+						int tbPolohaX = MouseInfo.getPointerInfo().getLocation().x;
+						int tbPolohaY = MouseInfo.getPointerInfo().getLocation().y;
+
+						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+
+							ToolBar tb = new ToolBar(m, main, hrana,0);
+							tb.setMapaService(mapaservice);
+							tb.setVisible(true);
+							tb.setLocation(tbPolohaX + 15, tbPolohaY + 15);
+							tb.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+						}
+					}
+					}
 			}
 
 			@Override
@@ -582,33 +580,29 @@ public class Main extends JFrame {
 	}
 	
 	public void setFeatures(Integer[] cisla, JTextField[] btn){
-		int soucet = 0;
-		int podil;
-		for (int i = 0; i < cisla.length; i++) {
-			soucet += cisla[i];
-		}
-		podil = soucet / 2;
 
-		if(features.jeSouvisly(cisla, podil))
+		features.main(cisla, mapaservice);
+		
+		if(features.isSouvisly())
 			btn[1].setText("ANO");
 		else
 			btn[1].setText("NE");
 
-		if(features.jeRovinny(cisla, podil))
+		if(features.isRovinny())
 			btn[3].setText("ANO");
 		else
 			btn[3].setText("NE");
 
-		if(features.jeEuler(cisla))
+		if(features.isEuler())
 			btn[5].setText("ANO");
 		else
 			btn[5].setText("NE");
 
-		if(features.jeStrom(cisla, podil))
+		if(features.isStrom())
 			btn[7].setText("ANO");
 		else
 			btn[7].setText("NE");
-			
+		btn[9].setText(Integer.toString(features.getKomponent()));
 	}
 	
 	public void ableCounts(boolean b) {

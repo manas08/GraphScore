@@ -76,7 +76,7 @@ public class Score extends JPanel {
 		rovinny1 = new JTextField("Rovinný?");
 		euler1 = new JTextField("Eulerovský?");
 		strom1 = new JTextField("Strom?");
-		komp1 = new JTextField("");
+		komp1 = new JTextField("Poèet komponent:");
 		souvisly2 = new JTextField("");
 		rovinny2 = new JTextField("");
 		euler2 = new JTextField("");
@@ -242,12 +242,12 @@ public class Score extends JPanel {
 		rovinny1.setVisible(true);
 		euler1.setVisible(true);
 		strom1.setVisible(true);
-		komp1.setVisible(false);
+		komp1.setVisible(true);
 		souvisly2.setVisible(true);
 		rovinny2.setVisible(true);
 		euler2.setVisible(true);
 		strom2.setVisible(true);
-		komp2.setVisible(false);
+		komp2.setVisible(true);
 
 		if (prvni == true) {
 			pnlTlacitka.add(btNewScore);
@@ -260,8 +260,8 @@ public class Score extends JPanel {
 			pnlTlacitka.add(euler2);
 			pnlTlacitka.add(strom1);
 			pnlTlacitka.add(strom2);
-			//pnlTlacitka.add(komp1);
-			//pnlTlacitka.add(komp2);
+			pnlTlacitka.add(komp1);
+			pnlTlacitka.add(komp2);
 			prvni = false;
 			btAlternative.setVisible(false);
 		}
@@ -474,7 +474,7 @@ public class Score extends JPanel {
 
 	public void refresh() {
 		cisla = mapaservice.getCisla();
-		features.main(cisla);
+		features.main(cisla, mapaservice);
 		setFeatures();
 	}
 
@@ -517,7 +517,7 @@ public class Score extends JPanel {
 				strom2.setText("ANO");
 			else
 				strom2.setText("NE");
-
+			komp2.setText(Integer.toString(features.getKomponent()));
 		} else
 			def = true;
 	}
