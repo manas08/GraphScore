@@ -28,6 +28,7 @@ public class Vrchol {
 	protected BufferedImage img;
 	public int stupen = 0;
 	public int komponenta;
+	public boolean navstiveno;
 
 	// Body pro vytvoreni hrany
 	protected Vrchol prvni;
@@ -40,6 +41,7 @@ public class Vrchol {
 		this.popis = popis;
 		this.img = img;
 		this.komponenta = 0;
+		this.navstiveno = false;
 	}
 
 	public Vrchol(int id, int x, int y, String nazev, String popis, BufferedImage img) {
@@ -57,6 +59,14 @@ public class Vrchol {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean getNavstiveno() {
+		return navstiveno;
+	}
+
+	public void setNavstiveno(boolean navstiveno) {
+		this.navstiveno = navstiveno;
 	}
 	
 	public int getKomponent() {

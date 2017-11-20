@@ -1,9 +1,6 @@
 package tools;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import entity.Hrana;
 import entity.Vrchol;
 
 public class Features {

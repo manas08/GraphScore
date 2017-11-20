@@ -443,27 +443,161 @@ public class Izomorfism extends JPanel {
 		btStejne.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				Hrana h1;
-				Hrana h2;
-				int shody = 0;
+				boolean pokracuj = false;
 				if(mapaservice1.getVrchol().size() == mapaservice2.getVrchol().size() && hrana1.getList().size() == hrana2.getList().size()) {
-					for (int i = 0; i < hrana1.getList().size(); i++) {
-						for (int j = 0; j < hrana2.getList().size(); j++) {
-							h1 = hrana1.getList().get(i);
-							h2 = hrana2.getList().get(i);
-							if(h1.getPrvni().getNazev() == h2.getPrvni().getNazev() && h1.getDruhy().getNazev() == h2.getDruhy().getNazev()) {
-								shody++;
-								j=0;
-								i++;
+					pokracuj = true;
+				} else
+					pokracuj = false;
+				
+			if(pokracuj) {
+
+				int prehoz;
+				List<Vrchol> vrch1 = mapaservice1.getVrchol();
+				Integer[] druhy1 = new Integer[vrch1.size()];
+				for (int i = 0; i < vrch1.size(); i++) {
+					 druhy1[i] = vrch1.get(i).getStupen();
+				}
+				for (int j = 0; j < druhy1.length - 1; j++) {
+					for (int j2 = j + 1; j2 < druhy1.length; j2++) {
+						if (druhy1[j] < druhy1[j2]) {
+							Vrchol pomocny;
+							prehoz = druhy1[j];
+							druhy1[j] = druhy1[j2];
+							druhy1[j2] = prehoz;
+							pomocny = mapaservice1.getVrchol().get(j);
+
+							vrch1.set(j, vrch1.get(j2));
+							vrch1.get(j2).setId(j + 1);
+							vrch1.set(j2, pomocny);
+							pomocny.setId(j2 + 1);
+						}
+					}
+				}
+				
+				List<Vrchol> vrch2 = mapaservice2.getVrchol();
+				Integer[] druhy2 = new Integer[vrch2.size()];
+				for (int i = 0; i < vrch2.size(); i++) {
+					 druhy2[i] = vrch2.get(i).getStupen();
+				}
+				for (int j = 0; j < druhy2.length - 1; j++) {
+					for (int j2 = j + 1; j2 < druhy2.length; j2++) {
+						if (druhy2[j] < druhy2[j2]) {
+							Vrchol pomocny;
+							prehoz = druhy2[j];
+							druhy2[j] = druhy2[j2];
+							druhy2[j2] = prehoz;
+							pomocny = mapaservice2.getVrchol().get(j);
+
+							vrch2.set(j, vrch2.get(j2));
+							vrch2.get(j2).setId(j + 1);
+							vrch2.set(j2, pomocny);
+							pomocny.setId(j2 + 1);
+						}
+					}
+				}
+				
+				for (Vrchol vrchol : vrch1) {
+					System.out.print(vrchol.getStupen());
+				}
+				System.out.println("");
+				System.out.println("-----------------------");
+				for (Vrchol vrchol : vrch2) {
+					System.out.print(vrchol.getStupen());
+				}
+				System.out.println("");
+				
+				// druhy vrchol z hrany musí mít stejný stupen jako u druheho grafu
+				int shod = 0;
+				
+				if(druhy1[0] == 0) {
+					boolean nuly = true;
+					for (int i = 0; i < druhy1.length; i++) {
+						if(druhy1[i] != druhy2[i]) {
+							nuly = false;
+						}
+					}
+					if(nuly == true)
+						JOptionPane.showMessageDialog(null, "Grafy jsou izomorfní.", "Izomorfismus", 1);
+					else
+						JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+					
+				}else {
+					int del = 0;
+					for (int i = 0; i < druhy1.length; i++) {
+						for (int j = 0; j < druhy2.length; j++) {
+							if(druhy1[i] == druhy2[j]) {
+								for (Hrana hr1 : hrana1.getList()) {
+									for (Hrana hr2 : hrana2.getList()) {
+										if(vrch1.get(i).getNazev() == hr1.getPrvni().getNazev()) {
+											System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   prvni");
+											if((hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen() && hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen())) {
+												if(hr2.getPrvni().getNavstiveno() == false) {
+													hr2.getPrvni().setNavstiveno(true);
+													shod++;
+												}
+											} else if((hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen() && hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen())) {
+												if(hr2.getDruhy().getNavstiveno() == false) {
+													hr2.getDruhy().setNavstiveno(true);
+													shod++;
+												}
+											} else {
+												System.out.println("1");
+												JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+												return;
+											}
+										} else if( vrch1.get(i).getNazev() == hr1.getDruhy().getNazev()) {
+											System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   druhy");
+											if((hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen() && hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen())) {
+												if(hr2.getPrvni().getNavstiveno() == false) {
+													hr2.getPrvni().setNavstiveno(true);
+													shod++;
+												}
+											}else if(hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen() && hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen()){
+												if(hr2.getDruhy().getNavstiveno() == false) {
+													hr2.getDruhy().setNavstiveno(true);
+													shod++;
+												}
+											} else {
+												System.out.println("2");
+												JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+												return;
+											}
+										}
+									}
+								}
 							}
 						}
 					}
-					if(shody==hrana1.getList().size()) {
+					
+					// u 1 hrany 3 * 1 + 2
+					// u 2 hran 3 * 2 + 4 ????
+					
+					
+					// nedìlat pøes shody ..ale když nenajdeme další sousední vrchol nebo ten sousední vrchol nebude mít shodný stupen tak už izomorfní nejsou
+					
+					//funguje jen ne pro 2,2,2,2,2,2
+					int nenulovych = 0;
+					for (int i = 0; i < druhy1.length; i++) {
+						if(druhy1[i] != 0)
+							nenulovych++;
+					}
+					for (int i = 0; i < druhy1.length; i++) {
+						del += druhy1[i];
+					}
+					for (Vrchol vrchol : vrch2) {
+						vrchol.setNavstiveno(false);
+					}
+					System.out.println(shod + " " + del/2);
+					//if(shod == del/2) {
 						JOptionPane.showMessageDialog(null, "Grafy jsou izomorfní.", "Izomorfismus", 1);
-					} else
-						JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-				} else
-					JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+					//} else {
+					//	JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+					//}
+					
+				}
+				
+			} else
+				JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
 			}
 		});
 
