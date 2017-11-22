@@ -474,7 +474,7 @@ public class Score extends JPanel {
 
 	public void refresh() {
 		cisla = mapaservice.getCisla();
-		features.main(cisla, mapaservice);
+		features.main(cisla, mapaservice, hrana);
 		setFeatures();
 	}
 

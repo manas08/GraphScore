@@ -139,6 +139,7 @@ public class NewVertex extends JFrame {
 				tfText1.setText("X:" + " " + polohaX + " " + "Y:" + " " + polohaY);
 				if (pomocna == false) {
 					setVisible(true);
+					tfNazevVrcholu.requestFocus();
 				}
 				if (pomocna == true) {
 					setVisible(false);

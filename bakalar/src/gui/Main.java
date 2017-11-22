@@ -36,7 +36,7 @@ import tools.MemMapaService;
 
 public class Main extends JFrame {
 
-	private MapaService mapaservice;
+	private MapaService mapaservice = new MemMapaService();;
 	private JPanel pnlMapa;
 	JPanel pnlTlacitka = new JPanel();
 	private int sirka = 1136;
@@ -77,8 +77,6 @@ public class Main extends JFrame {
 	public Main() {
 		super("GraphScore 0.2.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		mapaservice = new MemMapaService();
 
 		vytvorGui();
 
@@ -581,7 +579,12 @@ public class Main extends JFrame {
 	
 	public void setFeatures(Integer[] cisla, JTextField[] btn){
 
-		features.main(cisla, mapaservice);
+		features.main(cisla, mapaservice, hrana);
+		
+		for (Hrana hr : hrana.getList()) {
+			System.out.println(hr.getPrvni().getNazev() + " " + hr.getDruhy().getNazev() + "TOTO");
+		}
+		
 		
 		if(features.isSouvisly())
 			btn[1].setText("ANO");

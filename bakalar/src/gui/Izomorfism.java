@@ -5,6 +5,7 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import entity.Hrana;
 import entity.Vrchol;
+import tools.Features;
 import tools.MapaService;
 import tools.MemMapaService;
 import java.awt.BasicStroke;
@@ -70,6 +71,8 @@ public class Izomorfism extends JPanel {
 	Vrchol vrchol2;
 	int mys1X;
 	int mys1Y;
+	Features features1;
+	Features features2;
 
 	public Izomorfism(Main main, JButton izom) {
 
@@ -505,6 +508,11 @@ public class Izomorfism extends JPanel {
 					System.out.print(vrchol.getStupen());
 				}
 				System.out.println("");
+
+				// vše ok až na nejspíš špatný spoj ID-Název vrcholu
+				// když chci pøetáhnout bod jinam beru jiný bod
+				//proto možná nefunguje u nìkterých grafù porovnání
+				
 				
 				// druhy vrchol z hrany musí mít stejný stupen jako u druheho grafu
 				int shod = 0;
@@ -523,44 +531,56 @@ public class Izomorfism extends JPanel {
 					
 				}else {
 					int del = 0;
-					for (int i = 0; i < druhy1.length; i++) {
-						for (int j = 0; j < druhy2.length; j++) {
-							if(druhy1[i] == druhy2[j]) {
-								for (Hrana hr1 : hrana1.getList()) {
-									for (Hrana hr2 : hrana2.getList()) {
-										if(vrch1.get(i).getNazev() == hr1.getPrvni().getNazev()) {
-											System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   prvni");
-											if((hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen() && hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen())) {
-												if(hr2.getPrvni().getNavstiveno() == false) {
-													hr2.getPrvni().setNavstiveno(true);
-													shod++;
+					features1 = new Features();
+					features1.main(druhy1, mapaservice1, hrana1);
+					int p1 = features1.getKomponent();
+					features2 = new Features();
+					features2.main(druhy2, mapaservice2, hrana2);
+					int p2 = features2.getKomponent();
+					System.out.println(p1 + " " + p2 + " KOMPONENTY");
+					if(p1 != p2) {
+						JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+						return;
+					}else {
+						for (int i = 0; i < druhy1.length; i++) {
+							for (int j = 0; j < druhy2.length; j++) {
+								if(druhy1[i] == druhy2[j]) {
+									for (Hrana hr1 : hrana1.getList()) {
+										for (Hrana hr2 : hrana2.getList()) {
+											if(vrch1.get(i).getNazev() == hr1.getPrvni().getNazev()) {
+												System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   prvni");
+												if((hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen() && hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen())) {
+													if(hr2.getPrvni().getNavstiveno() == false) {
+														hr2.getPrvni().setNavstiveno(true);
+														shod++;
+													}
+												} else if((hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen() && hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen())) {
+													if(hr2.getDruhy().getNavstiveno() == false) {
+														hr2.getDruhy().setNavstiveno(true);
+														shod++;
+													}
+												} else {
+													System.out.println("1");
+													JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+													return;
 												}
-											} else if((hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen() && hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen())) {
-												if(hr2.getDruhy().getNavstiveno() == false) {
-													hr2.getDruhy().setNavstiveno(true);
-													shod++;
+											} else if( vrch1.get(i).getNazev() == hr1.getDruhy().getNazev()) {
+												System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   druhy");
+												if((hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen() && hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen())) {
+													if(hr2.getPrvni().getNavstiveno() == false) {
+														hr2.getPrvni().setNavstiveno(true);
+														shod++;
+													}
+												}else if(hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen() && hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen()){
+													if(hr2.getDruhy().getNavstiveno() == false) {
+														hr2.getDruhy().setNavstiveno(true);
+														shod++;
+													}
+												} else {
+													System.out.println("2");
+													JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+													return;
 												}
-											} else {
-												System.out.println("1");
-												JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-												return;
-											}
-										} else if( vrch1.get(i).getNazev() == hr1.getDruhy().getNazev()) {
-											System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   druhy");
-											if((hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen() && hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen())) {
-												if(hr2.getPrvni().getNavstiveno() == false) {
-													hr2.getPrvni().setNavstiveno(true);
-													shod++;
-												}
-											}else if(hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen() && hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen()){
-												if(hr2.getDruhy().getNavstiveno() == false) {
-													hr2.getDruhy().setNavstiveno(true);
-													shod++;
-												}
-											} else {
-												System.out.println("2");
-												JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-												return;
 											}
 										}
 									}
@@ -568,7 +588,6 @@ public class Izomorfism extends JPanel {
 							}
 						}
 					}
-					
 					// u 1 hrany 3 * 1 + 2
 					// u 2 hran 3 * 2 + 4 ????
 					
