@@ -82,7 +82,6 @@ public class Features {
 
 	// ------ Komponenty -------
 	public int pocetKomponent(Integer[] cisla) {
-		komponent = 0;
 		resetKomponent();
 		this.cisla = cisla;
 		Integer[] druhy = new Integer[cisla.length];
@@ -103,6 +102,7 @@ public class Features {
 		int[][] soused = new int[druhy.length][druhy.length];
 		int i = 0;
 		while (podm == false) {
+			komponent = 0;
 			for (int j1 = 0; j1 < druhy.length - 1; j1++) {
 				for (int j2 = j1 + 1; j2 < druhy.length; j2++) {
 					if (druhy[j1] < druhy[j2]) {
@@ -128,12 +128,16 @@ public class Features {
 			}
 			System.out.println("!!!!!");
 
-			for (Vrchol vrchol : mapaservice.getVrchol()) {
-				if (vrchol.getKomponent() > komponent)
-					komponent = vrchol.getKomponent();
-			}
 			// nastaveni komponenty pro prvni vrchol
 			vybrane = druhy[i];
+
+			if(vybrane != 0) {
+				for (Vrchol vrchol : mapaservice.getVrchol()) {
+					if (vrchol.getKomponent() > komponent)
+						komponent = vrchol.getKomponent();
+				}
+			}
+			
 			System.out.println(druhy[i] + " " + mapaservice.getVrchol().get(i).getNazev());
 			System.out.println();
 			if (mapaservice.getVrchol().get(i).getKomponent() == 0) {
@@ -149,6 +153,26 @@ public class Features {
 						System.out.println(vrchol.getKomponent() + " " + vrchol.getNazev());
 				}
 				System.out.println(" +++++++++");
+
+				// aby body spojené hranami mìly stejné komponenty
+				for (int j1 = 0; j1 < druhy.length-1; j1++) {
+					for (int j2 = 1; j2 < druhy.length; j2++) {
+						for (int j3 = 0; j3 < hrana.getList().size(); j3++) {
+							if((mapaservice.getVrchol().get(j1).getNazev() == hrana.getList().get(j3).getPrvni().getNazev() && mapaservice.getVrchol().get(j2).getNazev() == hrana.getList().get(j3).getDruhy().getNazev()) || (mapaservice.getVrchol().get(j1).getNazev() == hrana.getList().get(j3).getDruhy().getNazev()  && mapaservice.getVrchol().get(j2).getNazev() == hrana.getList().get(j3).getPrvni().getNazev()))
+							{
+								if(mapaservice.getVrchol().get(j1).getKomponent() > mapaservice.getVrchol().get(j2).getKomponent()) {
+									mapaservice.getVrchol().get(j1).setKomponent(mapaservice.getVrchol().get(j2).getKomponent());
+								} else if(mapaservice.getVrchol().get(j2).getKomponent() > mapaservice.getVrchol().get(j1).getKomponent()) {
+									mapaservice.getVrchol().get(j2).setKomponent(mapaservice.getVrchol().get(j1).getKomponent());
+								}
+							}
+						}
+					}
+				}
+
+				for (Vrchol vr : vrch) {
+					System.out.println(vr.getNazev() + " | " + vr.getId() + " " + vr.getStupen() + " " + vr.getKomponent());
+				}
 				for (int w = i; w < druhy.length; w++) {
 					// System.out.println(w + " " + mapaservice.getVrchol().get(w).getNazev() + " "+
 					// mapaservice.getVrchol().get(w).getKomponent());
@@ -190,7 +214,7 @@ public class Features {
 			}
 
 			// nastaveni komponenty pro vsechny vrcholy spojene s prvnim vrcholem
-			for (int j = 1 + i; j <= druhy.length-1; j++) {
+			for (int j = 1 + i; j <= i+vybrane; j++) {
 				if (mapaservice.getVrchol().get(j).getKomponent() == 0) {
 					for (int j2 = 0; j2 < hrana.getList().size(); j2++) {
 						if((mapaservice.getVrchol().get(j).getNazev() == hrana.getList().get(j2).getPrvni().getNazev() && mapaservice.getVrchol().get(i).getNazev() == hrana.getList().get(j2).getDruhy().getNazev()) || (mapaservice.getVrchol().get(j).getNazev() == hrana.getList().get(j2).getDruhy().getNazev()  && mapaservice.getVrchol().get(i).getNazev() == hrana.getList().get(j2).getPrvni().getNazev()))
@@ -202,7 +226,7 @@ public class Features {
 							}
 					}
 				}
-				if (mapaservice.getVrchol().get(j).getKomponent() != mapaservice.getVrchol().get(i).getKomponent()) {
+				else if (mapaservice.getVrchol().get(j).getKomponent() != mapaservice.getVrchol().get(i).getKomponent()) {
 					for (int j2 = 0; j2 < hrana.getList().size(); j2++) {
 						if (mapaservice.getVrchol().get(j).getKomponent() < mapaservice.getVrchol().get(i).getKomponent()) {
 							if((mapaservice.getVrchol().get(j).getNazev() == hrana.getList().get(j2).getPrvni().getNazev() && mapaservice.getVrchol().get(i).getNazev() == hrana.getList().get(j2).getDruhy().getNazev()) || (mapaservice.getVrchol().get(j).getNazev() == hrana.getList().get(j2).getDruhy().getNazev()  && mapaservice.getVrchol().get(i).getNazev() == hrana.getList().get(j2).getPrvni().getNazev()))
@@ -235,7 +259,8 @@ public class Features {
 								}
 								}
 					}
-				}
+				}else
+					druhy[j] -= 1;
 				System.out.println(druhy[j]);
 			}
 
@@ -244,6 +269,24 @@ public class Features {
 				podm = true;
 		}
 
+		// aby body spojené hranami mìly stejné komponenty
+		for (int j1 = 0; j1 < druhy.length-1; j1++) {
+			for (int j2 = 1; j2 < druhy.length; j2++) {
+				for (int j3 = 0; j3 < hrana.getList().size(); j3++) {
+					if((mapaservice.getVrchol().get(j1).getNazev() == hrana.getList().get(j3).getPrvni().getNazev() && mapaservice.getVrchol().get(j2).getNazev() == hrana.getList().get(j3).getDruhy().getNazev()) || (mapaservice.getVrchol().get(j1).getNazev() == hrana.getList().get(j3).getDruhy().getNazev()  && mapaservice.getVrchol().get(j2).getNazev() == hrana.getList().get(j3).getPrvni().getNazev()))
+					{
+						if(mapaservice.getVrchol().get(j1).getKomponent() > mapaservice.getVrchol().get(j2).getKomponent()) {
+							mapaservice.getVrchol().get(j1).setKomponent(mapaservice.getVrchol().get(j2).getKomponent());
+						} else if(mapaservice.getVrchol().get(j2).getKomponent() > mapaservice.getVrchol().get(j1).getKomponent()) {
+							mapaservice.getVrchol().get(j2).setKomponent(mapaservice.getVrchol().get(j1).getKomponent());
+						}
+					}
+				}
+			}
+		}
+		
+		// nezávislé zjištìní komponent
+		komponent = 0;
 		for (Vrchol vrchol : mapaservice.getVrchol()) {
 			if (vrchol.getKomponent() > komponent)
 				komponent = vrchol.getKomponent();
