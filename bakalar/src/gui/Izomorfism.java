@@ -170,96 +170,98 @@ public class Izomorfism extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				if(pocet == 1) {
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p1) {
 					int citlivost = 9;
 					int porovnej = 0;
-					for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
-						Vrchol m = mapaservice1.getVrchol().get(i);
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
-
-							if (hrana1.getPrvni() != m) {
-								if (hrana1.getList().size() != 0) {
-
-									for (int j = 0; j < hrana1.getList().size(); j++) {// prohledáme
-																						// všechny
-																						// hrany
-										Hrana hr = hrana1.getList().get(j);
-										// když už daná hrana bude exisovat tak
-										// nedìlat novou AB BA
-										if ((hr.getPrvni() == m && hr.getDruhy() == vrchol2)
-												|| (hr.getPrvni() == vrchol2 && hr.getDruhy() == m)) {
-											porovnej = 1;
-											clear();
-											present();
-											return;
-											// jinak udìlat novou hranu
-										} else if (pocet == 1) {
-											porovnej = 0;
+						for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
+							Vrchol m = mapaservice1.getVrchol().get(i);
+							if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+	
+								if (hrana1.getPrvni() != m) {
+									if (hrana1.getList().size() != 0) {
+	
+										for (int j = 0; j < hrana1.getList().size(); j++) {// prohledáme
+																							// všechny
+																							// hrany
+											Hrana hr = hrana1.getList().get(j);
+											// když už daná hrana bude exisovat tak
+											// nedìlat novou AB BA
+											if ((hr.getPrvni() == m && hr.getDruhy() == vrchol2)
+													|| (hr.getPrvni() == vrchol2 && hr.getDruhy() == m)) {
+												porovnej = 1;
+												clear();
+												present();
+												return;
+												// jinak udìlat novou hranu
+											} else if (pocet == 1) {
+												porovnej = 0;
+											}
 										}
-									}
-									// porovnání výsledkù
-									if (porovnej == 0) {
+										// porovnání výsledkù
+										if (porovnej == 0) {
+											hrana1.setDruhy(m);
+											pocet = 0;
+										}
+	
+									} else {
 										hrana1.setDruhy(m);
 										pocet = 0;
 									}
-
-								} else {
-									hrana1.setDruhy(m);
-									pocet = 0;
 								}
+	
 							}
-
 						}
-					}
-					clear();
-					present();
-				} else if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p2) {
-					int citlivost = 9;
-					int porovnej = 0;
-					for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
-						Vrchol m = mapaservice2.getVrchol().get(i);
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
-
-							if (hrana2.getPrvni() != m) {
-								if (hrana2.getList().size() != 0) {
-
-									for (int j = 0; j < hrana2.getList().size(); j++) {// prohledáme
-																						// všechny
-																						// hrany
-										Hrana hr = hrana2.getList().get(j);
-										// když už daná hrana bude exisovat tak
-										// nedìlat novou AB BA
-										if ((hr.getPrvni() == m && hr.getDruhy() == vrchol2)
-												|| (hr.getPrvni() == vrchol2 && hr.getDruhy() == m)) {
-											porovnej = 1;
-											clear();
-											present();
-											return;
-											// jinak udìlat novou hranu
-										} else if (pocet == 1) {
-											porovnej = 0;
+						clear();
+						present();
+					} else if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p2) {
+						int citlivost = 9;
+						int porovnej = 0;
+						for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
+							Vrchol m = mapaservice2.getVrchol().get(i);
+							if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+	
+								if (hrana2.getPrvni() != m) {
+									if (hrana2.getList().size() != 0) {
+	
+										for (int j = 0; j < hrana2.getList().size(); j++) {// prohledáme
+																							// všechny
+																							// hrany
+											Hrana hr = hrana2.getList().get(j);
+											// když už daná hrana bude exisovat tak
+											// nedìlat novou AB BA
+											if ((hr.getPrvni() == m && hr.getDruhy() == vrchol2)
+													|| (hr.getPrvni() == vrchol2 && hr.getDruhy() == m)) {
+												porovnej = 1;
+												clear();
+												present();
+												return;
+												// jinak udìlat novou hranu
+											} else if (pocet == 1) {
+												porovnej = 0;
+											}
 										}
-									}
-									// porovnání výsledkù
-									if (porovnej == 0) {
+										// porovnání výsledkù
+										if (porovnej == 0) {
+											hrana2.setDruhy(m);
+											pocet = 0;
+										}
+	
+									} else {
 										hrana2.setDruhy(m);
 										pocet = 0;
 									}
-
-								} else {
-									hrana2.setDruhy(m);
-									pocet = 0;
 								}
+	
 							}
-
 						}
-					}
-					clear();
-					present();
+						clear();
+						present();
 				}
 				pomoc = false;
+				}
 			}
-
+			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int citlivost = 9;

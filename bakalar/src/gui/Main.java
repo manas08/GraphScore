@@ -71,7 +71,7 @@ public class Main extends JFrame {
 
 	JButton btIzomor = new JButton("Izomorfismus");
 	JButton btHome = new JButton("Kreslení grafu");
-	JButton btColor = new JButton("Barva grafu");
+	JButton btColor = new JButton("Upravit vzhled grafu");
 	JButton btScore = new JButton("Kreslit podle skóre");
 	JButton btSmaz = new JButton("Nový graf");
 	JButton btPridat = new JButton("Pøidej vrchol");
@@ -271,48 +271,50 @@ public class Main extends JFrame {
 				if (e.getButton() == MouseEvent.BUTTON1) {
 					int citlivost = 9;
 					int porovnej = 0;
-					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
-						Vrchol m = mapaservice.getVrchol().get(i);
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
-								&& (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
-
-							if (hrana.getPrvni() != m) {
-								if (hrana.getList().size() != 0) {
-
-									for (int j = 0; j < hrana.getList().size(); j++) {// prohledáme
-																						// všechny
-																						// hrany
-										Hrana hr = hrana.getList().get(j);
-										// když už daná hrana bude exisovat tak
-										// nedìlat novou AB BA
-										if ((hr.getPrvni() == m && hr.getDruhy() == vrchol2)
-												|| (hr.getPrvni() == vrchol2 && hr.getDruhy() == m)) {
-											porovnej = 1;
-											clear();
-											present();
-											return;
-											// jinak udìlat novou hranu
-										} else if (pocet == 1) {
-											porovnej = 0;
+					if(pocet == 1) {
+						for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
+							Vrchol m = mapaservice.getVrchol().get(i);
+							if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+									&& (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+	
+								if (hrana.getPrvni() != m) {
+									if (hrana.getList().size() != 0) {
+	
+										for (int j = 0; j < hrana.getList().size(); j++) {// prohledáme
+																							// všechny
+																							// hrany
+											Hrana hr = hrana.getList().get(j);
+											// když už daná hrana bude exisovat tak
+											// nedìlat novou AB BA
+											if ((hr.getPrvni() == m && hr.getDruhy() == vrchol2)
+													|| (hr.getPrvni() == vrchol2 && hr.getDruhy() == m)) {
+												porovnej = 1;
+												clear();
+												present();
+												return;
+												// jinak udìlat novou hranu
+											} else if (pocet == 1) {
+												porovnej = 0;
+											}
 										}
-									}
-									// porovnání výsledkù
-									if (porovnej == 0) {
+										// porovnání výsledkù
+										if (porovnej == 0) {
+											hrana.setDruhy(m);
+											pocet = 0;
+										}
+	
+									} else {
 										hrana.setDruhy(m);
 										pocet = 0;
 									}
-
-								} else {
-									hrana.setDruhy(m);
-									pocet = 0;
 								}
-							}
-
-						} else
-							pocet = 0;
-					}
+	
+							} else
+								pocet = 0;
+						}
 					clear();
 					present();
+					}
 				}
 			}
 		});
@@ -455,11 +457,12 @@ public class Main extends JFrame {
 		btColor.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				//tools.ColorChooser ch = new tools.ColorChooser();
 
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						//ch.createAndShowGUI();
+						ColorChanger changer = new ColorChanger(mapaservice, hrana, main);
+						changer.setLocationRelativeTo(null);
+						changer.setVisible(true);
 					}
 				});
 			}
@@ -561,8 +564,8 @@ public class Main extends JFrame {
 		for (int i = 0; i < hrana.getList().size(); i++) {
 			Hrana h = hrana.getList().get(i);
 			if (h != null) {
-				gr.setStroke(new BasicStroke(4));
-				gr.setColor(new Color(165, 49, 68));
+				gr.setStroke(new BasicStroke(h.getStroke()));
+				gr.setColor(h.getColor());
 				gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				gr.drawLine(h.getPrvni().getX(), h.getPrvni().getY(), h.getDruhy().getX(), h.getDruhy().getY());
 			}

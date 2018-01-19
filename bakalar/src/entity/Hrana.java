@@ -11,6 +11,8 @@ public class Hrana {
 	private Vrchol druhy;
 	public Graphics2D gr;
 	public List<Hrana> list = new ArrayList<Hrana>();
+	int stroke;
+	Color color;
 
 	public Hrana() {
 	}
@@ -20,6 +22,8 @@ public class Hrana {
 		this.druhy = druhy;
 		prvni.stupen();
 		druhy.stupen();
+		this.stroke = 4;
+		this.color = new Color(165, 49, 68);
 	}
 
 	public Vrchol getPrvni() {
@@ -48,6 +52,22 @@ public class Hrana {
 		this.list = list;
 	}
 
+	public int getStroke() {
+		return stroke;
+	}
+
+	public void setStroke(int stroke) {
+		this.stroke = stroke;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
 	public void delete() {
 		for (int w = 0; w < list.size(); w++) {
 			list.get(w).getPrvni().stupen = 0;
@@ -60,8 +80,8 @@ public class Hrana {
 
 	public void draw(Graphics2D gr) {
 		this.gr = gr;
-		gr.setStroke(new BasicStroke(4));
-		gr.setColor(new Color(165, 49, 68));
+		gr.setStroke(new BasicStroke(stroke));
+		gr.setColor(color);
 		gr.drawLine(prvni.getX(), prvni.getY(), druhy.getX(), druhy.getY());
 		gr.setStroke(new BasicStroke(1));
 	}

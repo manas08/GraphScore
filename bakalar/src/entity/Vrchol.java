@@ -37,6 +37,7 @@ public class Vrchol {
 	protected Vrchol druhy;
 	
 	Color color;
+	int thic;
 	
 
 	public Vrchol(int x, int y, String nazev, String popis, BufferedImage img, Color color) {
@@ -48,6 +49,7 @@ public class Vrchol {
 		this.komponenta = 0;
 		this.navstiveno = false;
 		this.color = color;
+		this.thic = 10;
 	}
 
 	public Vrchol(int id, int x, int y, String nazev, String popis, BufferedImage img, Color color) {
@@ -58,6 +60,7 @@ public class Vrchol {
 		this.popis = popis;
 		this.img = img;
 		this.color = color;
+		this.thic = 10;
 	}
 
 	public int getId() {
@@ -132,13 +135,21 @@ public class Vrchol {
 		this.color = color;
 	}
 
+	public int getThickness() {
+		return thic;
+	}
+
+	public void setThickness(int thic) {
+		this.thic = thic;
+	}
+
 	public void paint(Graphics2D g, Vrchol m) {
 		// throw new UnsupportedOperationException("Nutno doprogramovat");
 		try {
 			//System.out.println(m.getNazev() + " " + m.getColor().getGreen() + " " + m.getColor().getRed() + " " + m.getColor().getBlue());
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setColor(m.getColor()); // barva bodu
-			g.fillOval(x - 10, y - 10, 20, 20); // nakresli kolecko, nastaveni
+			g.fillOval(x - thic, y - thic, 2 * thic, 2 * thic); // nakresli kolecko, nastaveni
 												// velikosti
 			g.setFont(new Font("default", Font.BOLD, 16));
 			g.drawString(m.getNazev(), x - 5, y + 30);
