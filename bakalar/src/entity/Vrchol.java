@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import tools.ColorChooser;
+
 public class Vrchol {
 
 	/**
@@ -33,8 +35,11 @@ public class Vrchol {
 	// Body pro vytvoreni hrany
 	protected Vrchol prvni;
 	protected Vrchol druhy;
+	
+	Color color;
+	
 
-	public Vrchol(int x, int y, String nazev, String popis, BufferedImage img) {
+	public Vrchol(int x, int y, String nazev, String popis, BufferedImage img, Color color) {
 		this.x = x;
 		this.y = y;
 		this.nazev = nazev;
@@ -42,15 +47,17 @@ public class Vrchol {
 		this.img = img;
 		this.komponenta = 0;
 		this.navstiveno = false;
+		this.color = color;
 	}
 
-	public Vrchol(int id, int x, int y, String nazev, String popis, BufferedImage img) {
+	public Vrchol(int id, int x, int y, String nazev, String popis, BufferedImage img, Color color) {
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.nazev = nazev;
 		this.popis = popis;
 		this.img = img;
+		this.color = color;
 	}
 
 	public int getId() {
@@ -117,11 +124,20 @@ public class Vrchol {
 		this.img = img;
 	}
 
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	public void paint(Graphics2D g, Vrchol m) {
 		// throw new UnsupportedOperationException("Nutno doprogramovat");
 		try {
+			//System.out.println(m.getNazev() + " " + m.getColor().getGreen() + " " + m.getColor().getRed() + " " + m.getColor().getBlue());
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setColor(new Color(0, 0, 0)); // barva bodu
+			g.setColor(m.getColor()); // barva bodu
 			g.fillOval(x - 10, y - 10, 20, 20); // nakresli kolecko, nastaveni
 												// velikosti
 			g.setFont(new Font("default", Font.BOLD, 16));

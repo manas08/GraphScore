@@ -2,17 +2,17 @@ package gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,10 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import com.sun.webkit.ColorChooser;
+
 import entity.Hrana;
 import entity.Vrchol;
 import tools.Features;
@@ -58,14 +62,16 @@ public class Main extends JFrame {
 	int mys1X;
 	int mys1Y;
 	boolean podm = false;
+	boolean prvnispusteni = true;
 	int okno = 0;
-	int poradi;
+	int poradi = -1;
 	Score score;
 	Integer[] cisla;
 	Features features = new Features();
 
 	JButton btIzomor = new JButton("Izomorfismus");
 	JButton btHome = new JButton("Kreslení grafu");
+	JButton btColor = new JButton("Barva grafu");
 	JButton btScore = new JButton("Kreslit podle skóre");
 	JButton btSmaz = new JButton("Nový graf");
 	JButton btPridat = new JButton("Pøidej vrchol");
@@ -90,6 +96,7 @@ public class Main extends JFrame {
 		btns.add(btHome);
 		btns.add(btIzomor);
 		btns.add(btScore);
+		btns.add(btColor);
 	}
 
 	public void vytvorGui() {
@@ -98,7 +105,7 @@ public class Main extends JFrame {
 		pnlMapa.setPreferredSize(new Dimension(sirka + 10, vyska + 10));
 		izo = new Izomorfism(main, btIzomor);
 		add(pnlMapa, "Center");
-		score = new Score(btScore,this);
+		score = new Score(btScore, this);
 		score.setVisible(false);
 
 		pnlTlacitka.setLayout(null);
@@ -106,10 +113,50 @@ public class Main extends JFrame {
 		pnlTlacitka.setVisible(true);
 		pnlTlacitka.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 5));
 
-		mapaservice.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null));
-		mapaservice.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null));
-		mapaservice.pridejVrchol(new Vrchol(600, 320, "C", "Budova C", null));
-		mapaservice.pridejVrchol(new Vrchol(464, 507, "D", "Budova FIM J", null));
+		mapaservice.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null, new Color(0, 0, 0)));
+		mapaservice.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null, new Color(0, 0, 0)));
+		mapaservice.pridejVrchol(new Vrchol(600, 320, "C", "Budova C", null, new Color(0, 0, 0)));
+		mapaservice.pridejVrchol(new Vrchol(464, 507, "D", "Budova FIM J", null, new Color(0, 0, 0)));
+
+		addComponentListener(new ComponentListener() {
+
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+				if (prvnispusteni != true) {
+					if (btIzomor.isEnabled() == false) {
+						prvnispusteni = false;
+						izo.present();
+					} else if (btHome.isEnabled() == false) {
+						prvnispusteni = false;
+						present();
+					} else if (btScore.isEnabled() == false) {
+						prvnispusteni = false;
+						score.present();
+					}
+				}
+
+				prvnispusteni = false;
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		addWindowListener(new WindowListener() {
 
 			@Override
@@ -143,13 +190,13 @@ public class Main extends JFrame {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				if (btIzomor.isEnabled()==false) {
+				if (btIzomor.isEnabled() == false) {
 					podm = false;
 					izo.present();
-				} else if (podm == true && btHome.isEnabled()==false) {
+				} else if (podm == true && btHome.isEnabled() == false) {
 					podm = false;
 					present();
-				} else if (btScore.isEnabled()==false) {
+				} else if (btScore.isEnabled() == false) {
 					podm = false;
 					score.present();
 				}
@@ -172,7 +219,9 @@ public class Main extends JFrame {
 					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
 						vrchol = mapaservice.getVrchol().get(i);
 
-						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY())) && (((vrchol.getX() - citlivost) <= e.getX()) && (((vrchol.getX() + citlivost) >= e.getX())))) {
+						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY()))
+								&& (((vrchol.getX() - citlivost) <= e.getX())
+										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							hrana.setPrvni(vrchol);
 							vrchol2 = hrana.getPrvni();
 							mys1X = e.getX();
@@ -180,7 +229,8 @@ public class Main extends JFrame {
 							pocet = 1;
 						}
 					}
-				}else if (SwingUtilities.isMiddleMouseButton(e)) {
+				} else if (SwingUtilities.isMiddleMouseButton(e)) {
+					int chyba = 0;
 					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
 						vrchol = mapaservice.getVrchol().get(i);
 
@@ -188,7 +238,13 @@ public class Main extends JFrame {
 								&& (((vrchol.getX() - citlivost) <= e.getX())
 										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							poradi = vrchol.getId();
+						} else {
+							chyba += 1;
 						}
+					}
+					if (chyba == mapaservice.getVrchol().size()) {
+						System.out.println("wdwdwddwd");
+						poradi = -1;
 					}
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
 					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
@@ -196,9 +252,10 @@ public class Main extends JFrame {
 						int tbPolohaX = MouseInfo.getPointerInfo().getLocation().x;
 						int tbPolohaY = MouseInfo.getPointerInfo().getLocation().y;
 
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+								&& (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
 
-							ToolBar tb = new ToolBar(m, main, hrana,0);
+							ToolBar tb = new ToolBar(m, main, hrana, 0);
 							tb.setMapaService(mapaservice);
 							tb.setVisible(true);
 							tb.setLocation(tbPolohaX + 15, tbPolohaY + 15);
@@ -206,7 +263,7 @@ public class Main extends JFrame {
 
 						}
 					}
-					}
+				}
 			}
 
 			@Override
@@ -216,7 +273,8 @@ public class Main extends JFrame {
 					int porovnej = 0;
 					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
 						Vrchol m = mapaservice.getVrchol().get(i);
-						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
+						if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+								&& (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
 
 							if (hrana.getPrvni() != m) {
 								if (hrana.getList().size() != 0) {
@@ -250,7 +308,8 @@ public class Main extends JFrame {
 								}
 							}
 
-						}
+						} else
+							pocet = 0;
 					}
 					clear();
 					present();
@@ -278,12 +337,15 @@ public class Main extends JFrame {
 						gr.drawLine(mys1X, mys1Y, mys2X, mys2Y);
 						present();
 					}
-				} if (SwingUtilities.isMiddleMouseButton(e)) {
-					clear();
-					v1 = mapaservice.getPodleId(poradi);
-					v1.setX(e.getX());
-					v1.setY(e.getY());
-					present();
+				}
+				if (SwingUtilities.isMiddleMouseButton(e)) {
+					if (poradi != -1) {
+						clear();
+						v1 = mapaservice.getPodleId(poradi);
+						v1.setX(e.getX());
+						v1.setY(e.getY());
+						present();
+					}
 				}
 			}
 
@@ -292,7 +354,7 @@ public class Main extends JFrame {
 			}
 
 		};
-		
+
 		pnlMapa.addMouseMotionListener(mouse);
 
 		btHome.addMouseMotionListener(new MouseMotionListener() {
@@ -360,7 +422,7 @@ public class Main extends JFrame {
 
 		btFeatures.setPreferredSize(new Dimension(170, 25));
 		btFeatures.addMouseListener(new java.awt.event.MouseAdapter() {
-		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				izo.hideshowBTN(main, false, 1);
 				score.vytvorGUI();
 				score.disablePanel(true);
@@ -369,12 +431,12 @@ public class Main extends JFrame {
 					pnlTlacitka.add(jTextField);
 				}
 				setFeatures(cisla, btn);
-		    }
+			}
 
-		    public void mouseExited(java.awt.event.MouseEvent evt) {
+			public void mouseExited(java.awt.event.MouseEvent evt) {
 				izo.hideshowBTN(main, true, 1);
 				score.disablePanel(false);
-		    }
+			}
 		});
 
 		btIzomor.setPreferredSize(new Dimension(170, 25));
@@ -386,6 +448,20 @@ public class Main extends JFrame {
 				izo.hideshowBTN(main, false, 0);
 				izo.aplly(main);
 				disableBTN(btIzomor);
+			}
+		});
+
+		btColor.setPreferredSize(new Dimension(170, 25));
+		btColor.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				//tools.ColorChooser ch = new tools.ColorChooser();
+
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						//ch.createAndShowGUI();
+					}
+				});
 			}
 		});
 
@@ -416,7 +492,6 @@ public class Main extends JFrame {
 				ableCounts(true);
 			}
 		});
-		
 
 		hrany.setBounds(20, 750, 170, 25);
 		hrany.setEnabled(false);
@@ -471,6 +546,8 @@ public class Main extends JFrame {
 		pnlTlacitka.add(btIzomor);
 		btScore.setBounds(15, 220, 165, 25);
 		pnlTlacitka.add(btScore);
+		btColor.setBounds(15, 280, 165, 25);
+		pnlTlacitka.add(btColor);
 		pnlTlacitka.setBackground(new Color(47, 48, 60));
 
 		add(pnlTlacitka, "East");
@@ -509,22 +586,6 @@ public class Main extends JFrame {
 		edge = new DelEdge(hrana);
 		edge.setLocationRelativeTo(null);
 		edge.delete(hrana, main, izo, 0);
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		main = new Main();
-		SwingUtilities.invokeLater(() -> {
-			SwingUtilities.invokeLater(() -> {
-				SwingUtilities.invokeLater(() -> {
-					SwingUtilities.invokeLater(() -> {
-						main.present();
-					});
-				});
-			});
-		});
 	}
 
 	public void present() {
@@ -569,48 +630,59 @@ public class Main extends JFrame {
 		return pnlTlacitka;
 	}
 
-
 	public void graphScore() {
 		cisla = new Integer[mapaservice.getVrchol().size()];
 		for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
-			cisla[i]=mapaservice.getVrchol().get(i).getStupen();
+			cisla[i] = mapaservice.getVrchol().get(i).getStupen();
 		}
 	}
-	
-	public void setFeatures(Integer[] cisla, JTextField[] btn){
+
+	public void setFeatures(Integer[] cisla, JTextField[] btn) {
 
 		features.main(cisla, mapaservice, hrana);
-		
+
 		for (Hrana hr : hrana.getList()) {
 			System.out.println(hr.getPrvni().getNazev() + " " + hr.getDruhy().getNazev() + "TOTO");
 		}
-		
-		
-		if(features.isSouvisly())
+
+		if (features.isSouvisly())
 			btn[1].setText("ANO");
 		else
 			btn[1].setText("NE");
 
-		if(features.isRovinny())
+		if (features.isRovinny())
 			btn[3].setText("ANO");
 		else
 			btn[3].setText("NE");
 
-		if(features.isEuler())
+		if (features.isEuler())
 			btn[5].setText("ANO");
 		else
 			btn[5].setText("NE");
 
-		if(features.isStrom())
+		if (features.isStrom())
 			btn[7].setText("ANO");
 		else
 			btn[7].setText("NE");
 		btn[9].setText(Integer.toString(features.getKomponent()));
 	}
-	
+
 	public void ableCounts(boolean b) {
 		hrany.setVisible(b);
 		vrcholy.setVisible(b);
+	}
+
+	public static void main(String[] args) {
+		main = new Main();
+		SwingUtilities.invokeLater(() -> {
+			SwingUtilities.invokeLater(() -> {
+				SwingUtilities.invokeLater(() -> {
+					SwingUtilities.invokeLater(() -> {
+						main.present();
+					});
+				});
+			});
+		});
 	}
 
 }

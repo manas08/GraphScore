@@ -319,10 +319,10 @@ public class Score extends JPanel {
 					double angle = 2 * Math.PI * i / vrcholy;
 					x = (int) Math.round((sirka / 2) + 300 * Math.cos(angle));
 					y = (int) Math.round((vyska / 2) + 300 * Math.sin(angle));
-					mapaservice.pridejVrchol(new Vrchol(x, y, String.valueOf(alphabet[i]), " ", null));
+					mapaservice.pridejVrchol(new Vrchol(x, y, String.valueOf(alphabet[i]), " ", null, new Color(0, 0, 0)));
 				}
 			} else if (vrcholy == 1) {
-				mapaservice.pridejVrchol(new Vrchol(sirka / 2, vyska / 2, "A", " ", null));
+				mapaservice.pridejVrchol(new Vrchol(sirka / 2, vyska / 2, "A", " ", null, new Color(0, 0, 0)));
 			}
 		}
 	}
@@ -531,7 +531,7 @@ public class Score extends JPanel {
 		souvisly1.setBackground(new Color(47, 48, 60));
 		souvisly1.setBorder(null);
 
-		souvisly2.setBounds(150, 500, 30, 25);
+		souvisly2.setBounds(150, 500, 35, 25);
 		souvisly2.setEnabled(false);
 		souvisly2.setDisabledTextColor(new Color(80, 250, 240));
 		souvisly2.setFont(new Font("Times New Roman", Font.BOLD, 14));
@@ -545,7 +545,7 @@ public class Score extends JPanel {
 		rovinny1.setBackground(new Color(47, 48, 60));
 		rovinny1.setBorder(null);
 
-		rovinny2.setBounds(150, 530, 30, 25);
+		rovinny2.setBounds(150, 530, 35, 25);
 		rovinny2.setEnabled(false);
 		rovinny2.setDisabledTextColor(new Color(80, 250, 240));
 		rovinny2.setFont(new Font("Times New Roman", Font.BOLD, 14));
@@ -559,7 +559,7 @@ public class Score extends JPanel {
 		euler1.setBackground(new Color(47, 48, 60));
 		euler1.setBorder(null);
 
-		euler2.setBounds(150, 560, 30, 25);
+		euler2.setBounds(150, 560, 35, 25);
 		euler2.setEnabled(false);
 		euler2.setDisabledTextColor(new Color(80, 250, 240));
 		euler2.setFont(new Font("Times New Roman", Font.BOLD, 14));
@@ -573,7 +573,7 @@ public class Score extends JPanel {
 		strom1.setBackground(new Color(47, 48, 60));
 		strom1.setBorder(null);
 
-		strom2.setBounds(150, 590, 30, 25);
+		strom2.setBounds(150, 590, 35, 25);
 		strom2.setEnabled(false);
 		strom2.setDisabledTextColor(new Color(80, 250, 240));
 		strom2.setFont(new Font("Times New Roman", Font.BOLD, 14));
@@ -587,7 +587,7 @@ public class Score extends JPanel {
 		komp1.setBackground(new Color(47, 48, 60));
 		komp1.setBorder(null);
 
-		komp2.setBounds(150, 620, 30, 25);
+		komp2.setBounds(150, 620, 35, 25);
 		komp2.setEnabled(false);
 		komp2.setDisabledTextColor(new Color(80, 250, 240));
 		komp2.setFont(new Font("Times New Roman", Font.BOLD, 14));

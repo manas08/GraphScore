@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -12,33 +14,39 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import entity.Hrana;
 import entity.Vrchol;
+import tools.ColorChooser;
 import tools.MapaService;
 
 public class ToolBar extends JFrame {
 	private MapaService mapaservice;
-	private JPanel pnl = (new JPanel(new GridLayout(4, 1, 0, 0)));
-	private JPanel pnl2 = (new JPanel(new FlowLayout()));
+	private JPanel pnl = (new JPanel(new GridLayout(5, 1, 0, 0)));
+	private JPanel pnl2 = (new JPanel(new GridLayout(2, 1, 0, 5)));
 	private JPanel pnl3 = (new JPanel(new FlowLayout()));
 	private JButton btSmazat;
+	private JButton btBarva;
 	private String nazevBodu;
 	private int tbID;
 	Score score;
 	Izomorfism izo;
+	ColorChooser ch;
+	Vrchol v;
+	Main main;
 
 	public ToolBar(Vrchol m, Main main, Hrana hrana, int i) {
 		super("Detaily bodu");
-
+		this.v = m;
+		this.main = main;
 		setSize(400, 300);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		tbID = m.getId();
-		nazevBodu = m.getNazev();
+		tbID = v.getId();
+		nazevBodu = v.getNazev();
 
 		pnl.add((new JLabel("   Název:     " + nazevBodu)));
-		pnl.add(new JLabel("   Popis:    " + m.getPopis()));
+		pnl.add(new JLabel("   Popis:    " + v.getPopis()));
 		pnl.add(new JLabel("   ID:    " + tbID));
-		pnl.add(new JLabel("   Stupeò:    " + m.getStupen()));
+		pnl.add(new JLabel("   Stupeò:    " + v.getStupen()));
 
 		pnl2.add(btSmazat = (new JButton("<html><font size=3>Smazat bod</font></html>")));
 		btSmazat.setPreferredSize(new Dimension(200, 25));
@@ -73,6 +81,24 @@ public class ToolBar extends JFrame {
 				}
 			}
 		});
+		
+		
+		pnl2.add(btBarva = (new JButton("<html><font size=3>Zmìnit barvu bodu</font></html>")));
+		btBarva.setPreferredSize(new Dimension(200, 25));
+		btBarva.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						ch.createAndShowGUI();
+					}
+				});
+				ch = new ColorChooser(getThis());
+				setVisible(false);
+			}
+		});
 
 		getContentPane().add(pnl, "Center");
 		getContentPane().add(pnl2, "South");
@@ -92,5 +118,19 @@ public class ToolBar extends JFrame {
 
 	public void izo(Izomorfism iz) {
 		this.izo=iz;
+	}
+	
+	public ToolBar getThis() {
+		return this;
+	}
+
+	public void applyColor(Color color) {
+		v.setColor(color);
+		System.out.println(color.getGreen()+ " " + color.getRed() + " " + color.getBlue());
+		main.present();
+	}
+	
+	public Vrchol getVrchol() {
+		return v;
 	}
 }

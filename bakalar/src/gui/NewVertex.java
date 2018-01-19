@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import entity.Vrchol;
 import tools.MapaService;
@@ -36,7 +36,6 @@ public class NewVertex extends JFrame {
 	public String tbPopis;
 	public String tbId;
 	public String s1 = "";
-	private Izomorfism izo;
 	private boolean pomocna = false; // pri vytvoreni nastavena na false
 
 	public NewVertex(Main main, Izomorfism izo, int which) {
@@ -44,7 +43,6 @@ public class NewVertex extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(450, 250);
 		setResizable(false);
-		this.izo=izo;
 		
 		getContentPane().add(pnlNorth, "North");
 		getContentPane().add(pnlCenter, "Center");
@@ -165,7 +163,7 @@ public class NewVertex extends JFrame {
 			pomocna = true;
 
 			mapaservice2.pridejVrchol(
-					new Vrchol(polohaX, polohaY, tfNazevVrcholu.getText(), tfPopisVrcholu.getText(), null));
+					new Vrchol(polohaX, polohaY, tfNazevVrcholu.getText(), tfPopisVrcholu.getText(), null, new Color(0, 0, 0)));
 			tfStav.setText("  Bod " + tfNazevVrcholu.getText() + " byl uložen");
 			tfNazevVrcholu.setEditable(false);
 			tfPopisVrcholu.setEditable(false);

@@ -263,6 +263,7 @@ public class Izomorfism extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int citlivost = 9;
+				int chyba = 0;
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p1) {
 					for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
 						vrchol = mapaservice1.getVrchol().get(i);
@@ -273,7 +274,11 @@ public class Izomorfism extends JPanel {
 							mys1X = e.getX();
 							mys1Y = e.getY();
 							pocet = 1;
+						}else {
+							chyba+=1;
 						}
+					}if(chyba == mapaservice1.getVrchol().size()) {
+						pocet = 0;
 					}
 				}else if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p2) {
 					for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
@@ -285,8 +290,11 @@ public class Izomorfism extends JPanel {
 							mys1X = e.getX();
 							mys1Y = e.getY();
 							pocet = 1;
-							System.out.println("dwdw");
+						}else {
+							chyba+=1;
 						}
+					}if(chyba == mapaservice1.getVrchol().size()) {
+						pocet = 0;
 					}
 				} else if (SwingUtilities.isMiddleMouseButton(e) && e.getSource() == p1) {
 					for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
@@ -595,11 +603,6 @@ public class Izomorfism extends JPanel {
 					// nedìlat pøes shody ..ale když nenajdeme další sousední vrchol nebo ten sousední vrchol nebude mít shodný stupen tak už izomorfní nejsou
 					
 					//funguje jen ne pro 2,2,2,2,2,2
-					int nenulovych = 0;
-					for (int i = 0; i < druhy1.length; i++) {
-						if(druhy1[i] != 0)
-							nenulovych++;
-					}
 					for (int i = 0; i < druhy1.length; i++) {
 						del += druhy1[i];
 					}
@@ -647,9 +650,9 @@ public class Izomorfism extends JPanel {
 		graph1.setBounds(20, 380, 70, 25);
 		graph2.setBounds(20, 402, 70, 25);
 
-		mapaservice1.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null));
-		mapaservice1.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null));
-		mapaservice1.pridejVrchol(new Vrchol(160, 507, "C", "Budova FIM J", null));
+		mapaservice1.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null, new Color(0, 0, 0)));
+		mapaservice1.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null, new Color(0, 0, 0)));
+		mapaservice1.pridejVrchol(new Vrchol(160, 507, "C", "Budova FIM J", null, new Color(0, 0, 0)));
 		p3.add(p1, "East");
 		p3.add(p2, "West");
 	}

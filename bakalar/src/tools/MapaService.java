@@ -1,12 +1,8 @@
 package tools;
 
-import java.awt.Image;
 import java.util.List;
-
 import entity.Hrana;
 import entity.Vrchol;
-import gui.DelEdge;
-import gui.Main;
 
 
 /**
