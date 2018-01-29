@@ -3,12 +3,17 @@ package tools;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
+import entity.Hrana;
 import entity.Vrchol;
 import gui.ColorChanger;
 import gui.JPanelImage;
+import gui.Main;
+import gui.NewVertex;
 import gui.ToolBar;
 
  
@@ -25,7 +30,9 @@ public class ColorChooser extends JPanel
      JFrame frame = new JFrame("Vybrat barvu");
      int typ;
      ColorChanger changer;
-
+     Main main;
+     NewVertex o;
+     Hrana hrana;
 
 	public ColorChooser(ToolBar tb) {
         super(new BorderLayout());
@@ -94,6 +101,68 @@ public class ColorChooser extends JPanel
         add(tcc, BorderLayout.PAGE_START);
 	}
 
+	public ColorChooser(Main main, NewVertex o) {
+        super(new BorderLayout());
+        this.main = main;
+        this.typ = 4;
+        this.o = o;
+ 
+        //Set up the banner at the top of the window
+        
+ 
+        //Set up color chooser for setting text color
+        tcc = new JColorChooser();
+        tcc.getSelectionModel().addChangeListener(this);
+        tcc.setBorder(BorderFactory.createTitledBorder(
+                                             "Choose Text Color"));
+        previewLabel = new JPanelImage(90, 40);
+        Graphics2D g = img.createGraphics();
+        g.setColor(previewLabel.getBackground());
+        g.fillRect(0, 0, 90, 40);
+        g.setColor(o.getColor());
+        g.fillRect(15, 0, 60, 40);
+     	setColor(o.getColor());
+        
+        
+	    previewLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	    previewLabel.getGraph().drawImage(img, 0, 0, null);
+	    tcc.setPreviewPanel(previewLabel);
+        UIManager.put("ColorChooser.swatchesRecentSwatchSize", new Dimension(20,20));
+        UIManager.put("ColorChooser.swatchesSwatchSize", new Dimension(20,20));
+        add(tcc, BorderLayout.PAGE_START);
+	}
+
+	public ColorChooser(Main main, Hrana hrana) {
+        super(new BorderLayout());
+        this.main = main;
+        this.typ = 5;
+        this.hrana = hrana;
+ 
+        //Set up the banner at the top of the window
+        
+ 
+        //Set up color chooser for setting text color
+        tcc = new JColorChooser();
+        tcc.getSelectionModel().addChangeListener(this);
+        tcc.setBorder(BorderFactory.createTitledBorder(
+                                             "Choose Text Color"));
+        previewLabel = new JPanelImage(90, 40);
+        Graphics2D g = img.createGraphics();
+        g.setColor(previewLabel.getBackground());
+        g.fillRect(0, 0, 90, 40);
+        g.setColor(hrana.getColor());
+        g.fillRect(15, 0, 60, 40);
+     	setColor(hrana.getColor());
+        
+        
+	    previewLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	    previewLabel.getGraph().drawImage(img, 0, 0, null);
+	    tcc.setPreviewPanel(previewLabel);
+        UIManager.put("ColorChooser.swatchesRecentSwatchSize", new Dimension(20,20));
+        UIManager.put("ColorChooser.swatchesSwatchSize", new Dimension(20,20));
+        add(tcc, BorderLayout.PAGE_START);
+	}
+
 	public void stateChanged(ChangeEvent e) {
         Graphics2D g = img.createGraphics();
         g.setColor(tcc.getSelectionModel().getSelectedColor());
@@ -108,6 +177,10 @@ public class ColorChooser extends JPanel
 	    	changer.applyColorVrcholu(getColor());
 	    else if(typ == 3)
 	    	changer.applyColorHran(getColor());
+	    else if(typ == 4)
+	    	main.applyColorVrcholu(getColor());
+	    else if(typ == 5)
+	    	main.applyColorHran(getColor());
     }
  
     /**
@@ -124,7 +197,11 @@ public class ColorChooser extends JPanel
         
 	    if(typ == 1) {
 	    	newContentPane = new ColorChooser(tb);
-	    }
+	    }else if(typ == 4) {
+		   newContentPane = new ColorChooser(main, o);
+	    }else if(typ == 5) {
+			   newContentPane = new ColorChooser(main, hrana);
+		}
 	    else{
 	       newContentPane = new ColorChooser(changer, typ);
 	    }

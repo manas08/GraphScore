@@ -73,6 +73,7 @@ public class Izomorfism extends JPanel {
 	int mys1Y;
 	Features features1;
 	Features features2;
+	Color color = new Color(165, 49, 68);
 
 	public Izomorfism(Main main, JButton izom) {
 
@@ -200,12 +201,12 @@ public class Izomorfism extends JPanel {
 										}
 										// porovnání výsledkù
 										if (porovnej == 0) {
-											hrana1.setDruhy(m);
+											hrana1.setDruhy(m, color);
 											pocet = 0;
 										}
 	
 									} else {
-										hrana1.setDruhy(m);
+										hrana1.setDruhy(m, color);
 										pocet = 0;
 									}
 								}
@@ -243,12 +244,12 @@ public class Izomorfism extends JPanel {
 										}
 										// porovnání výsledkù
 										if (porovnej == 0) {
-											hrana2.setDruhy(m);
+											hrana2.setDruhy(m, color);
 											pocet = 0;
 										}
 	
 									} else {
-										hrana2.setDruhy(m);
+										hrana2.setDruhy(m, color);
 										pocet = 0;
 									}
 								}
@@ -644,13 +645,13 @@ public class Izomorfism extends JPanel {
 		});
 
 		// ------Umístìní tlaèítek--------
-		btNewVertex.setBounds(15, 440, 165, 25);
-		btNewGraph.setBounds(15, 480, 165, 25);
-		btDelHrany.setBounds(15, 520, 165, 25);
-		btDelHranu.setBounds(15, 560, 165, 25);
-		btStejne.setBounds(15, 600, 165, 25);
-		graph1.setBounds(20, 380, 70, 25);
-		graph2.setBounds(20, 402, 70, 25);
+		btNewVertex.setBounds(15, 470, 165, 25);
+		btNewGraph.setBounds(15, 510, 165, 25);
+		btDelHrany.setBounds(15, 550, 165, 25);
+		btDelHranu.setBounds(15, 590, 165, 25);
+		btStejne.setBounds(15, 630, 165, 25);
+		graph1.setBounds(20, 410, 70, 25);
+		graph2.setBounds(20, 432, 70, 25);
 
 		mapaservice1.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null, new Color(0, 0, 0)));
 		mapaservice1.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null, new Color(0, 0, 0)));
@@ -830,5 +831,13 @@ public class Izomorfism extends JPanel {
 			clear2();
 			present2();
 		}
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 }

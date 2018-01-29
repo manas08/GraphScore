@@ -59,7 +59,7 @@ public class Features {
 			}
 		}
 		
-		System.out.println(count + " " + cisla.length/2);
+		//System.out.println(count + " " + cisla.length/2);
 		if (count > cisla.length / 2)
 			return false;
 		else if (count <= cisla.length / 2)
@@ -146,6 +146,7 @@ public class Features {
 				else if (i <= 0)
 					mapaservice.getVrchol().get(i).setKomponent(1);
 			}
+			System.out.println(mapaservice.getVrchol().get(i).getKomponent() + " poèet komponent " + mapaservice.getVrchol().get(i).getNazev());
 
 			// kdyz nasledujici body budou 0 tak to jsou taky komponenty
 			if (vybrane == 0) {
@@ -234,29 +235,25 @@ public class Features {
 								mapaservice.getVrchol().get(i).setKomponent(mapaservice.getVrchol().get(j).getKomponent());
 								druhy[j] -= 1;
 
+								System.out.println(komponent + " komp1 " + mapaservice.getVrchol().get(i).getKomponent() + " vrchol " + mapaservice.getVrchol().get(i).getNazev());
 								// sousedùm bodu dáme stejnou komponentu
-								for (int k = 0; k < druhy.length; k++) {
 									for (int k2 = 0; k2 < druhy.length; k2++) {
-										if(soused[k][k2]==1) {
-											mapaservice.getVrchol().get(k2).setKomponent(mapaservice.getVrchol().get(k).getKomponent());
+										if(soused[i][k2]==1) {
+											mapaservice.getVrchol().get(k2).setKomponent(mapaservice.getVrchol().get(i).getKomponent());
 										}
 									}
-								}
 								}
 						} else if (mapaservice.getVrchol().get(j).getKomponent() > mapaservice.getVrchol().get(i).getKomponent())
 							if((mapaservice.getVrchol().get(j).getNazev() == hrana.getList().get(j2).getPrvni().getNazev() && mapaservice.getVrchol().get(i).getNazev() == hrana.getList().get(j2).getDruhy().getNazev()) || (mapaservice.getVrchol().get(j).getNazev() == hrana.getList().get(j2).getDruhy().getNazev()  && mapaservice.getVrchol().get(i).getNazev() == hrana.getList().get(j2).getPrvni().getNazev()))
 								{
 								mapaservice.getVrchol().get(j).setKomponent(mapaservice.getVrchol().get(i).getKomponent());
 								druhy[j] -= 1;
-
 								// sousedùm bodu dáme stejnou komponentu
-								for (int k = 0; k < druhy.length; k++) {
 									for (int k2 = 0; k2 < druhy.length; k2++) {
-										if(soused[k][k2]==1) {
-											mapaservice.getVrchol().get(k2).setKomponent(mapaservice.getVrchol().get(k).getKomponent());
+										if(soused[i][k2]==1) {
+											mapaservice.getVrchol().get(k2).setKomponent(mapaservice.getVrchol().get(i).getKomponent());
 										}
 									}
-								}
 								}
 					}
 				}else

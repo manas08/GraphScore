@@ -36,6 +36,8 @@ public class NewVertex extends JFrame {
 	public String tbPopis;
 	public String tbId;
 	public String s1 = "";
+	Color color = new Color(0, 0, 0);
+
 	private boolean pomocna = false; // pri vytvoreni nastavena na false
 
 	public NewVertex(Main main, Izomorfism izo, int which) {
@@ -163,7 +165,7 @@ public class NewVertex extends JFrame {
 			pomocna = true;
 
 			mapaservice2.pridejVrchol(
-					new Vrchol(polohaX, polohaY, tfNazevVrcholu.getText(), tfPopisVrcholu.getText(), null, new Color(0, 0, 0)));
+					new Vrchol(polohaX, polohaY, tfNazevVrcholu.getText(), tfPopisVrcholu.getText(), null, color));
 			tfStav.setText("  Bod " + tfNazevVrcholu.getText() + " byl uložen");
 			tfNazevVrcholu.setEditable(false);
 			tfPopisVrcholu.setEditable(false);
@@ -174,5 +176,13 @@ public class NewVertex extends JFrame {
 
 	public void setMapaService(MapaService mapaservice) {
 		this.mapaservice2 = mapaservice;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 }

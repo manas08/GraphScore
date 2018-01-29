@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.Main;
+
 public class Hrana {
 	private Vrchol prvni;
 	private Vrchol druhy;
@@ -17,13 +19,13 @@ public class Hrana {
 	public Hrana() {
 	}
 
-	public Hrana(Vrchol prvni, Vrchol druhy) {
+	public Hrana(Vrchol prvni, Vrchol druhy, Color color) {
 		this.prvni = prvni;
 		this.druhy = druhy;
 		prvni.stupen();
 		druhy.stupen();
 		this.stroke = 4;
-		this.color = new Color(165, 49, 68);
+		this.color = color;
 	}
 
 	public Vrchol getPrvni() {
@@ -38,9 +40,9 @@ public class Hrana {
 		this.prvni = prvni;
 	}
 
-	public void setDruhy(Vrchol druhy) {
+	public void setDruhy(Vrchol druhy, Color color) {
 		this.druhy = druhy;
-		Hrana hran = new Hrana(prvni, this.druhy);
+		Hrana hran = new Hrana(prvni, this.druhy, color);
 		list.add(hran);
 	}
 
@@ -76,14 +78,6 @@ public class Hrana {
 		list.clear();
 		prvni = null;
 		druhy = null;
-	}
-
-	public void draw(Graphics2D gr) {
-		this.gr = gr;
-		gr.setStroke(new BasicStroke(stroke));
-		gr.setColor(color);
-		gr.drawLine(prvni.getX(), prvni.getY(), druhy.getX(), druhy.getY());
-		gr.setStroke(new BasicStroke(1));
 	}
 
 	public void deleteEdge(Vrchol v) {

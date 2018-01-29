@@ -29,7 +29,6 @@ public class MemMapaService implements MapaService {
 		vrchol.add(m);
 		IDcko++; // narust IDcko o 1
 		m.setId(IDcko);
-
 	}
 
 	@Override

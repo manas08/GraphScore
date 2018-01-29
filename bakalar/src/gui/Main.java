@@ -58,6 +58,8 @@ public class Main extends JFrame {
 	JTextField vrcholy = new JTextField();
 	JTextField navigace = new JTextField("Navigace:");
 	JTextField vlastnosti = new JTextField("Vlastnosti:");
+	JTextField barvaV = new JTextField("Vrcholy:");
+	JTextField barvaH = new JTextField("Hrany:");
 	BufferedImage image;
 	int mys1X;
 	int mys1Y;
@@ -68,6 +70,9 @@ public class Main extends JFrame {
 	Score score;
 	Integer[] cisla;
 	Features features = new Features();
+	tools.ColorChooser ch;
+	NewVertex o;
+	Note note;
 
 	JButton btIzomor = new JButton("Izomorfismus");
 	JButton btHome = new JButton("Kreslení grafu");
@@ -78,6 +83,9 @@ public class Main extends JFrame {
 	JButton btDelHrany = new JButton("Odstraò všechny hrany");
 	JButton btDelHranu = new JButton("Odstraò hranu");
 	JButton btFeatures = new JButton("Zobrazit vlastnosti");
+	JButton btBarvaV = new JButton();
+	JButton btBarvaH = new JButton();
+	JButton btNotes = new JButton("Poznámka");
 	List<JButton> btns = new ArrayList<>();
 
 	public Main() {
@@ -299,12 +307,12 @@ public class Main extends JFrame {
 										}
 										// porovnání výsledkù
 										if (porovnej == 0) {
-											hrana.setDruhy(m);
+											hrana.setDruhy(m, btBarvaH.getBackground());
 											pocet = 0;
 										}
 	
 									} else {
-										hrana.setDruhy(m);
+										hrana.setDruhy(m, btBarvaH.getBackground());
 										pocet = 0;
 									}
 								}
@@ -335,7 +343,7 @@ public class Main extends JFrame {
 						int mys2X = e.getX();
 						int mys2Y = e.getY();
 						gr.setStroke(new BasicStroke(4));
-						gr.setColor(new Color(165, 49, 68));
+						gr.setColor(btBarvaH.getBackground());
 						gr.drawLine(mys1X, mys1Y, mys2X, mys2Y);
 						present();
 					}
@@ -358,6 +366,9 @@ public class Main extends JFrame {
 		};
 
 		pnlMapa.addMouseMotionListener(mouse);
+		
+		btBarvaV.setBackground(new Color(0, 0, 0));
+		btBarvaH.setBackground(new Color(165, 49, 68));
 
 		btHome.addMouseMotionListener(new MouseMotionListener() {
 
@@ -393,7 +404,8 @@ public class Main extends JFrame {
 		btPridat.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				NewVertex o = new NewVertex(main, izo, 1);
+				o = new NewVertex(main, izo, 1);
+				o.setColor(btBarvaV.getBackground());
 				o.setLocationRelativeTo(null);
 				o.setMapaService(mapaservice);
 				o.setJPanelImage(pnlMapa);
@@ -450,6 +462,8 @@ public class Main extends JFrame {
 				izo.hideshowBTN(main, false, 0);
 				izo.aplly(main);
 				disableBTN(btIzomor);
+				barvaH.setVisible(false);
+				barvaV.setVisible(false);
 			}
 		});
 
@@ -467,7 +481,7 @@ public class Main extends JFrame {
 				});
 			}
 		});
-
+		
 		disableBTN(btHome);
 		btHome.setPreferredSize(new Dimension(170, 25));
 		btHome.addActionListener(new ActionListener() {
@@ -480,6 +494,8 @@ public class Main extends JFrame {
 				score.disablePanel(false);
 				ableCounts(true);
 				izo.disIzo();
+				barvaH.setVisible(true);
+				barvaV.setVisible(true);
 			}
 		});
 
@@ -493,8 +509,52 @@ public class Main extends JFrame {
 				score.aplly(main, btScore);
 				disableBTN(btScore);
 				ableCounts(true);
+				barvaH.setVisible(false);
+				barvaV.setVisible(false);
 			}
 		});
+
+		btBarvaV.setPreferredSize(new Dimension(20, 20));
+		btBarvaV.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(o == null)
+					o = new NewVertex(main, izo, 1);
+				
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						ch.createAndShowGUI();
+					}
+				});
+				ch = new tools.ColorChooser(main, o);
+			}
+		});
+
+		btBarvaH.setPreferredSize(new Dimension(20, 20));
+		btBarvaH.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						ch.createAndShowGUI();
+					}
+				});
+				ch = new tools.ColorChooser(main, hrana);
+			}
+		});
+
+		btNotes.setPreferredSize(new Dimension(170, 25));
+		btNotes.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				note = new Note();
+				note.setVisible(true);
+			}
+		});
+		
 
 		hrany.setBounds(20, 750, 170, 25);
 		hrany.setEnabled(false);
@@ -520,7 +580,7 @@ public class Main extends JFrame {
 		navigace.setBorder(null);
 		pnlTlacitka.add(navigace);
 
-		vlastnosti.setBounds(20, 350, 170, 25);
+		vlastnosti.setBounds(20, 380, 170, 25);
 		vlastnosti.setEnabled(false);
 		vlastnosti.setDisabledTextColor(new Color(240, 150, 80));
 		vlastnosti.setFont(new Font("Times New Roman", Font.BOLD, 20));
@@ -528,14 +588,30 @@ public class Main extends JFrame {
 		vlastnosti.setBorder(null);
 		pnlTlacitka.add(vlastnosti);
 
+		barvaV.setBounds(20, 320, 50, 25);
+		barvaV.setEnabled(false);
+		barvaV.setDisabledTextColor(new Color(240, 150, 80));
+		barvaV.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		barvaV.setBackground(new Color(47, 48, 60));
+		barvaV.setBorder(null);
+		pnlTlacitka.add(barvaV);
+
+		barvaH.setBounds(110, 320, 45, 25);
+		barvaH.setEnabled(false);
+		barvaH.setDisabledTextColor(new Color(240, 150, 80));
+		barvaH.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		barvaH.setBackground(new Color(47, 48, 60));
+		barvaH.setBorder(null);
+		pnlTlacitka.add(barvaH);
+		
 		// vlastnosti
-		btSmaz.setBounds(40, 410, 120, 25);
+		btSmaz.setBounds(40, 440, 120, 25);
 		pnlTlacitka.add(btSmaz);
-		btPridat.setBounds(40, 470, 120, 25);
+		btPridat.setBounds(40, 500, 120, 25);
 		pnlTlacitka.add(btPridat);
-		btDelHranu.setBounds(40, 530, 120, 25);
+		btDelHranu.setBounds(40, 560, 120, 25);
 		pnlTlacitka.add(btDelHranu);
-		btDelHrany.setBounds(15, 590, 165, 25);
+		btDelHrany.setBounds(15, 620, 165, 25);
 		pnlTlacitka.add(btDelHrany);
 		btFeatures.setBounds(15, 650, 165, 25);
 		pnlTlacitka.add(btFeatures);
@@ -551,6 +627,14 @@ public class Main extends JFrame {
 		pnlTlacitka.add(btScore);
 		btColor.setBounds(15, 280, 165, 25);
 		pnlTlacitka.add(btColor);
+		btBarvaV.setBounds(75, 320, 20, 20);
+		pnlTlacitka.add(btBarvaV);
+		btBarvaH.setBounds(160, 320, 20, 20);
+		pnlTlacitka.add(btBarvaH);
+		
+		btNotes.setBounds(40, 848, 120, 20);
+		pnlTlacitka.add(btNotes);
+		
 		pnlTlacitka.setBackground(new Color(47, 48, 60));
 
 		add(pnlTlacitka, "East");
@@ -595,6 +679,7 @@ public class Main extends JFrame {
 		vykresliHranu();
 		if (pnlMapa.getGraphics() != null)
 			pnlMapa.getGraphics().drawImage(image, 0, 0, null);
+
 	}
 
 	public void clear() {
@@ -610,6 +695,9 @@ public class Main extends JFrame {
 		blist.add(btPridat);
 		blist.add(btSmaz);
 		blist.add(btFeatures);
+		blist.add(btColor);
+		blist.add(btBarvaH);
+		blist.add(btBarvaV);
 		return blist;
 	}
 
@@ -675,6 +763,18 @@ public class Main extends JFrame {
 		vrcholy.setVisible(b);
 	}
 
+	public void applyColorVrcholu(Color color) {
+		btBarvaV.setBackground(color);
+	}
+
+	public void applyColorHran(Color color) {
+		btBarvaH.setBackground(color);
+	}
+
+	public Color getBarvuHrany() {
+		return btBarvaH.getBackground();
+	}
+	
 	public static void main(String[] args) {
 		main = new Main();
 		SwingUtilities.invokeLater(() -> {

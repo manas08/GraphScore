@@ -16,6 +16,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -33,6 +35,7 @@ public class Score extends JPanel {
 	JPanel panel;
 	JButton btNewScore;
 	JButton btAlternative;
+	JButton btSteps;
 	JTextField souvisly1;
 	JTextField rovinny1;
 	JTextField euler1;
@@ -65,6 +68,7 @@ public class Score extends JPanel {
 	Integer[] cisla;
 	List<Vrchol> puvod = new ArrayList<Vrchol>();
 	MouseListener ml;
+	Steps steps;
 
 	public Score(JButton score, Main main) {
 		panel = new JPanel();
@@ -72,6 +76,7 @@ public class Score extends JPanel {
 		image = new BufferedImage(sirka + 10, vyska + 10, BufferedImage.TYPE_INT_RGB);
 		btNewScore = new JButton("Zadat skóre");
 		btAlternative = new JButton("Alternativní graf");
+		btSteps = new JButton("Rozbor skóre");
 		souvisly1 = new JTextField("Souvislý?");
 		rovinny1 = new JTextField("Rovinný?");
 		euler1 = new JTextField("Eulerovský?");
@@ -218,14 +223,25 @@ public class Score extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				hrana.delete();
 				clear();
-				generateEdge2(cisla);
+				generateEdge2();
 				btAlternative.setVisible(false);
 			}
 		});
 
+		btSteps.setPreferredSize(new Dimension(170, 25));
+		btSteps.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				steps = new Steps();
+				steps.write(cisla);
+			}
+		});
+
 		// ------Umístìní tlaèítek--------
-		btNewScore.setBounds(40, 400, 120, 25);
-		btAlternative.setBounds(40, 460, 120, 25);
+		btNewScore.setBounds(40, 425, 120, 25);
+		btAlternative.setBounds(40, 465, 120, 25);
+		btSteps.setBounds(40, 505, 120, 25);
 
 		vytvorGUI();
 	}
@@ -252,6 +268,7 @@ public class Score extends JPanel {
 		if (prvni == true) {
 			pnlTlacitka.add(btNewScore);
 			pnlTlacitka.add(btAlternative);
+			pnlTlacitka.add(btSteps);
 			pnlTlacitka.add(souvisly1);
 			pnlTlacitka.add(souvisly2);
 			pnlTlacitka.add(rovinny1);
@@ -264,6 +281,7 @@ public class Score extends JPanel {
 			pnlTlacitka.add(komp2);
 			prvni = false;
 			btAlternative.setVisible(false);
+			btSteps.setVisible(false);
 		}
 
 		clear();
@@ -341,18 +359,19 @@ public class Score extends JPanel {
 
 	// rozdìlení hran mezi vrcholy
 	public void generateEdge(Integer[] cisla) {
+		puvod.clear();
 		this.cisla = cisla;
 		Integer[] druhy = new Integer[cisla.length];
 		for (int i = 0; i < cisla.length; i++) {
 			druhy[i] = cisla[i];
 		}
-
 		int vybrane;
 		int prehoz;
 		boolean podm = false;
 		List<Vrchol> vrch = mapaservice.getVrchol();
 		for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
 			puvod.add(mapaservice.getVrchol().get(i));
+			System.out.println("****************" + mapaservice.getVrchol().get(i).getNazev() + " " + mapaservice.getVrchol().get(i).getId());
 		}
 		for (Vrchol vrchol : vrch) {
 			vrchol.saveID();
@@ -380,17 +399,29 @@ public class Score extends JPanel {
 			hrana.setPrvni(mapaservice.getVrchol().get(i));
 			if (vybrane == 0) {
 				present();
-				refresh();
-				for (Vrchol vrchol : vrch) {
+				for (Vrchol vrchol : mapaservice.getVrchol()) {
 					vrchol.setID2();
 				}
+				
+				// seøazení listu pro korektní další poèítání
+				Collections.sort(mapaservice.getVrchol(),new Comparator<Vrchol>() {
+
+					@Override
+					public int compare(Vrchol v1, Vrchol v2) {
+		                return v1.getId() - v2.getId();
+					}
+			    });
+				
+				refresh();
+				btSteps.setVisible(true);
 				showAlternative();
 				return;
 			}
 
 			for (int j = 1 + i; j <= vybrane + i; j++) {
-				hrana.setDruhy(mapaservice.getVrchol().get(j));
+				hrana.setDruhy(mapaservice.getVrchol().get(j), new Color(165, 49, 68));
 				druhy[j] -= 1;
+				System.out.println(vybrane + " " + druhy[j]);
 			}
 
 			i++;
@@ -398,20 +429,30 @@ public class Score extends JPanel {
 				podm = true;
 		}
 		present();
-		refresh();
-
-		for (Vrchol vrchol : vrch) {
+		for (Vrchol vrchol : mapaservice.getVrchol()) {
 			vrchol.setID2();
 		}
+		
+		// seøazení listu pro korektní další poèítání
+		Collections.sort(mapaservice.getVrchol(),new Comparator<Vrchol>() {
+
+			@Override
+			public int compare(Vrchol v1, Vrchol v2) {
+                return v1.getId() - v2.getId();
+			}
+	    });
+		
+		refresh();
+		btSteps.setVisible(true);
 		showAlternative();
 	}
 
 	// rozdìlení hran mezi vrcholy
-	public void generateEdge2(Integer[] cisla) {
-		this.cisla = cisla;
+	public void generateEdge2() {
 		Integer[] druhy = new Integer[cisla.length];
 		for (int i = 0; i < cisla.length; i++) {
 			druhy[i] = cisla[i];
+			System.out.println(cisla[i] + "§§§§§§§§§§" + puvod.get(i).getNazev());
 		}
 
 		int prehoz;
@@ -452,7 +493,7 @@ public class Score extends JPanel {
 
 					j = i + 1;
 					hrana.setPrvni(puvod.get(i));
-					hrana.setDruhy(puvod.get(j));
+					hrana.setDruhy(puvod.get(j), new Color(165, 49, 68));
 
 					druhy[i] -= 1;
 					druhy[j] -= 1;
@@ -524,70 +565,70 @@ public class Score extends JPanel {
 
 	// -----Umístìní informací o grafu------
 	public void vytvorGUI() {
-		souvisly1.setBounds(25, 500, 170, 25);
+		souvisly1.setBounds(25, 550, 170, 25);
 		souvisly1.setEnabled(false);
 		souvisly1.setDisabledTextColor(new Color(240, 150, 80));
 		souvisly1.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		souvisly1.setBackground(new Color(47, 48, 60));
 		souvisly1.setBorder(null);
 
-		souvisly2.setBounds(150, 500, 35, 25);
+		souvisly2.setBounds(150, 550, 35, 25);
 		souvisly2.setEnabled(false);
 		souvisly2.setDisabledTextColor(new Color(80, 250, 240));
 		souvisly2.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		souvisly2.setBackground(new Color(47, 48, 60));
 		souvisly2.setBorder(null);
 
-		rovinny1.setBounds(25, 530, 170, 25);
+		rovinny1.setBounds(25, 580, 170, 25);
 		rovinny1.setEnabled(false);
 		rovinny1.setDisabledTextColor(new Color(240, 150, 80));
 		rovinny1.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		rovinny1.setBackground(new Color(47, 48, 60));
 		rovinny1.setBorder(null);
 
-		rovinny2.setBounds(150, 530, 35, 25);
+		rovinny2.setBounds(150, 580, 35, 25);
 		rovinny2.setEnabled(false);
 		rovinny2.setDisabledTextColor(new Color(80, 250, 240));
 		rovinny2.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		rovinny2.setBackground(new Color(47, 48, 60));
 		rovinny2.setBorder(null);
 
-		euler1.setBounds(25, 560, 170, 25);
+		euler1.setBounds(25, 610, 170, 25);
 		euler1.setEnabled(false);
 		euler1.setDisabledTextColor(new Color(240, 150, 80));
 		euler1.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		euler1.setBackground(new Color(47, 48, 60));
 		euler1.setBorder(null);
 
-		euler2.setBounds(150, 560, 35, 25);
+		euler2.setBounds(150, 610, 35, 25);
 		euler2.setEnabled(false);
 		euler2.setDisabledTextColor(new Color(80, 250, 240));
 		euler2.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		euler2.setBackground(new Color(47, 48, 60));
 		euler2.setBorder(null);
 
-		strom1.setBounds(25, 590, 170, 25);
+		strom1.setBounds(25, 640, 170, 25);
 		strom1.setEnabled(false);
 		strom1.setDisabledTextColor(new Color(240, 150, 80));
 		strom1.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		strom1.setBackground(new Color(47, 48, 60));
 		strom1.setBorder(null);
 
-		strom2.setBounds(150, 590, 35, 25);
+		strom2.setBounds(150, 640, 35, 25);
 		strom2.setEnabled(false);
 		strom2.setDisabledTextColor(new Color(80, 250, 240));
 		strom2.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		strom2.setBackground(new Color(47, 48, 60));
 		strom2.setBorder(null);
 
-		komp1.setBounds(25, 620, 170, 25);
+		komp1.setBounds(25, 670, 170, 25);
 		komp1.setEnabled(false);
 		komp1.setDisabledTextColor(new Color(240, 150, 80));
 		komp1.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		komp1.setBackground(new Color(47, 48, 60));
 		komp1.setBorder(null);
 
-		komp2.setBounds(150, 620, 35, 25);
+		komp2.setBounds(150, 670, 35, 25);
 		komp2.setEnabled(false);
 		komp2.setDisabledTextColor(new Color(80, 250, 240));
 		komp2.setFont(new Font("Times New Roman", Font.BOLD, 14));
