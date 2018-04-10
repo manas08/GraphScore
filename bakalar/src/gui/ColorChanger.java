@@ -21,13 +21,15 @@ import tools.ColorChooser;
 import tools.MapaService;
 
 public class ColorChanger extends JFrame {
-	private JPanel pnl = (new JPanel(new GridLayout(5, 0, 0, 0)));
-	private JPanel pnl2 = (new JPanel(new GridLayout(5, 0, 0, 0)));
+	private JPanel pnl = (new JPanel(new GridLayout(6, 0, 0, 0)));
+	private JPanel pnl2 = (new JPanel(new GridLayout(6, 0, 0, 0)));
 	private JPanel pnl3 = new JPanel();
 	private JButton btThickness;
 	private JButton btStroke;
 	private JButton btBarvaVrcholu;
 	private JButton btBarvaHran;
+	private JButton btStrokeAll;
+	private JButton btThicknessAll;
 	private JTextArea tf1;
 	private JTextArea tf2;
 	Score score;
@@ -43,9 +45,9 @@ public class ColorChanger extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		if(hrana.getList().size()!=0) {
-			setPreferredSize(new Dimension(250, 320));
+			setPreferredSize(new Dimension(250, 345));
 		}else
-			setPreferredSize(new Dimension(250, 160));
+			setPreferredSize(new Dimension(250, 185));
 		
 		this.mapaservice = mapaservice;
 		this.hrana = hrana;
@@ -54,22 +56,29 @@ public class ColorChanger extends JFrame {
 
 		pnl.add((new JLabel("Vrcholy")));
 		pnl.add((new JLabel("   Velikost bodu: ")));
-		tf1 = new JTextArea("" + mapaservice.getVrchol().get(0).getThickness());
+		tf1 = new JTextArea("" + Vrchol.getThicknessAll());
 		pnl.add(tf1);
-		btThickness = new JButton("Uložit");
+		tf1.setCaretPosition(String.valueOf(Vrchol.getThicknessAll()).length());
+		btThickness = new JButton("Nastavit velikost bodù");
 		pnl.add(btThickness);
+		btThicknessAll = new JButton("Uložit pro budoucí vrcholy");
+		pnl.add(btThicknessAll);
 		btBarvaVrcholu = new JButton("Zmìnit barvu všech vrcholù");
 		pnl.add(btBarvaVrcholu);
+		btBarvaVrcholu.setBackground(new Color(0, 255, 242));
 		
 		if(hrana.getList().size()!=0) {
 			pnl2.add(new JLabel("Hrany"));
 			pnl2.add((new JLabel("   Velikost hrany: ")));
-			tf2 = new JTextArea("" + hrana.getList().get(0).getStroke());
+			tf2 = new JTextArea("" + Hrana.getStrokeAll());
 			pnl2.add(tf2);
-			btStroke = new JButton("Uložit");
+			btStroke = new JButton("Nastavit tloušku hrany");
 			pnl2.add(btStroke);
+			btStrokeAll = new JButton("Uložit pro budoucí hrany");
+			pnl2.add(btStrokeAll);
 			btBarvaHran = new JButton("Zmìnit barvu všech hran");
 			pnl2.add(btBarvaHran);
+			btBarvaHran.setBackground(new Color(0, 255, 242));
 		}
 
 		
@@ -95,6 +104,23 @@ public class ColorChanger extends JFrame {
 			}
 		});
 
+		btThicknessAll.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try { 
+			        Integer.parseInt(tf1.getText()); 
+			    } catch(NumberFormatException e1) { 
+					JOptionPane.showMessageDialog(null, "Špatnì zvolená veliskot. Zadejte èíslo v rozsahu 4-15!");
+					return;
+			    }
+				
+				if(Integer.parseInt(tf1.getText()) >= 4 && Integer.parseInt(tf1.getText()) <= 15) {
+						Vrchol.setThicknessAll(Integer.parseInt(tf1.getText()));
+				}else
+					JOptionPane.showMessageDialog(null, "Špatnì zvolená veliskot. Zadejte èíslo v rozsahu 4-15!");
+			}
+		});
 
 		btBarvaVrcholu.addActionListener(new ActionListener() {
 			
@@ -133,6 +159,25 @@ public class ColorChanger extends JFrame {
 						main.present();
 					}else
 						JOptionPane.showMessageDialog(null, "Špatnì zvolená veliskot. Zadejte èíslo v rozsahu 1-10!");
+				}
+			});
+
+			btStrokeAll.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try { 
+				        Integer.parseInt(tf2.getText()); 
+				    } catch(NumberFormatException e1) { 
+						JOptionPane.showMessageDialog(null, "Špatnì zvolená veliskot. Zadejte èíslo v rozsahu 4-15!");
+						return;
+				    }
+					
+					if(Integer.parseInt(tf2.getText()) >= 4 && Integer.parseInt(tf2.getText()) <= 15) {
+							Hrana.setStrokeAll(Integer.parseInt(tf2.getText()));
+							main.setStroke(Integer.parseInt(tf2.getText()));
+					}else
+						JOptionPane.showMessageDialog(null, "Špatnì zvolená veliskot. Zadejte èíslo v rozsahu 4-15!");
 				}
 			});
 			

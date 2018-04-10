@@ -89,15 +89,15 @@ public class Izomorfism extends JPanel {
 
 		mapaservice1 = new MemMapaService();
 		mapaservice2 = new MemMapaService();
-		image1 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
-		image2 = new BufferedImage(563, 856, BufferedImage.TYPE_INT_RGB);
+		image1 = new BufferedImage(535, 866, BufferedImage.TYPE_INT_RGB);
+		image2 = new BufferedImage(535, 866, BufferedImage.TYPE_INT_RGB);
 		btNewVertex = new JButton("Vložit nový vrchol");
 		btNewGraph = new JButton("Nový graf");
 		btDelHrany = new JButton("Odstraò všechny hrany");
 		btDelHranu = new JButton("Odstraò hranu");
 		btStejne = new JButton("Jsou izomorfní?");
-		p1.setPreferredSize(new Dimension(563, 856));
-		p2.setPreferredSize(new Dimension(563, 856));
+		p1.setPreferredSize(new Dimension(535, 866));
+		p2.setPreferredSize(new Dimension(535, 866));
 
 		// prvotní pøekreslení když pohneme myší
 		izom.addMouseMotionListener(new MouseMotionListener() {
@@ -128,14 +128,72 @@ public class Izomorfism extends JPanel {
 				if (SwingUtilities.isMiddleMouseButton(e) && pomoc == true && e.getSource() == p1) {
 					clear1();
 					v1 = mapaservice1.getPodleId(poradi);
-					v1.setX(e.getX());
-					v1.setY(e.getY());
+					// ošetøení rohù abychom nekreslili body mimo okno
+					if (e.getX() < 0 && e.getY() < 0) {
+						v1.setX(0);
+						v1.setY(0);
+					} else if (e.getX() < 0 && e.getY() > 866) {
+						v1.setX(0);
+						v1.setY(866);
+					} else if (e.getX() > 535 && e.getY() > 866) {
+						v1.setX(535);
+						v1.setY(866);
+					} else if (e.getX() > 535 && e.getY() < 0) {
+						v1.setX(535);
+						v1.setY(0);
+						// ošetøení hran
+					} else if (e.getX() < 0) {
+						v1.setX(0);
+						v1.setY(e.getY());
+					} else if (e.getX() > 535) {
+						v1.setX(535);
+						v1.setY(e.getY());
+					} else if (e.getY() < 0) {
+						v1.setX(e.getX());
+						v1.setY(0);
+					} else if (e.getY() > 866) {
+						v1.setX(e.getX());
+						v1.setY(866);
+						// uvnitø okna
+					} else {
+						v1.setX(e.getX());
+						v1.setY(e.getY());
+					}
 					present1();
 				} else if (SwingUtilities.isMiddleMouseButton(e) && pomoc == true && e.getSource() == p2) {
 					clear2();
 					v1 = mapaservice2.getPodleId(poradi);
-					v1.setX(e.getX());
-					v1.setY(e.getY());
+					// ošetøení rohù abychom nekreslili body mimo okno
+					if (e.getX() < 0 && e.getY() < 0) {
+						v1.setX(0);
+						v1.setY(0);
+					} else if (e.getX() < 0 && e.getY() > 866) {
+						v1.setX(0);
+						v1.setY(866);
+					} else if (e.getX() > 535 && e.getY() > 866) {
+						v1.setX(535);
+						v1.setY(866);
+					} else if (e.getX() > 535 && e.getY() < 0) {
+						v1.setX(535);
+						v1.setY(0);
+						// ošetøení hran
+					} else if (e.getX() < 0) {
+						v1.setX(0);
+						v1.setY(e.getY());
+					} else if (e.getX() > 535) {
+						v1.setX(535);
+						v1.setY(e.getY());
+					} else if (e.getY() < 0) {
+						v1.setX(e.getX());
+						v1.setY(0);
+					} else if (e.getY() > 866) {
+						v1.setX(e.getX());
+						v1.setY(866);
+						// uvnitø okna
+					} else {
+						v1.setX(e.getX());
+						v1.setY(e.getY());
+					}
 					present2();
 				} else if (pocet == 1) {
 					if (SwingUtilities.isLeftMouseButton(e) && e.getSource() == p1) {
@@ -626,11 +684,11 @@ public class Izomorfism extends JPanel {
 			}
 		});
 
-		graph1.setBackground(new Color(47, 48, 60));
+		graph1.setBackground(new Color(214, 217, 223));
 		graph1.setSelected(true);
-		graph2.setBackground(new Color(47, 48, 60));
-		graph1.setForeground(new Color(240, 150, 80));
-		graph2.setForeground(new Color(240, 150, 80));
+		graph2.setBackground(new Color(214, 217, 223));
+		graph1.setForeground(new Color(47, 48, 60));
+		graph2.setForeground(new Color(47, 48, 60));
 
 		ButtonGroup btn = new ButtonGroup();
 		btn.add(graph1);
@@ -645,13 +703,13 @@ public class Izomorfism extends JPanel {
 		});
 
 		// ------Umístìní tlaèítek--------
-		btNewVertex.setBounds(15, 470, 165, 25);
-		btNewGraph.setBounds(15, 510, 165, 25);
-		btDelHrany.setBounds(15, 550, 165, 25);
-		btDelHranu.setBounds(15, 590, 165, 25);
-		btStejne.setBounds(15, 630, 165, 25);
-		graph1.setBounds(20, 410, 70, 25);
-		graph2.setBounds(20, 432, 70, 25);
+		btNewVertex.setBounds(15, 472, 165, 25);
+		btNewGraph.setBounds(15, 522, 165, 25);
+		btDelHrany.setBounds(15, 572, 165, 25);
+		btDelHranu.setBounds(15, 622, 165, 25);
+		btStejne.setBounds(15, 672, 165, 25);
+		graph1.setBounds(20, 400, 70, 25);
+		graph2.setBounds(20, 422, 70, 25);
 
 		mapaservice1.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null, new Color(0, 0, 0)));
 		mapaservice1.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null, new Color(0, 0, 0)));
@@ -839,5 +897,24 @@ public class Izomorfism extends JPanel {
 
 	public void setColor(Color color) {
 		this.color = color;
+	}
+	
+	public BufferedImage spojeni() {
+	 	int offset  = 5;
+        int wid = image1.getWidth()+image2.getWidth()+offset;
+        int height = Math.max(image1.getHeight(),image2.getHeight())+offset;
+        //create a new buffer and draw two image into the new image
+        BufferedImage newImage = new BufferedImage(wid,height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = newImage.createGraphics();
+        Color oldColor = g2.getColor();
+        //fill background
+        g2.setPaint(new Color(242, 242, 242));
+        g2.fillRect(0, 0, wid, height);
+        //draw image
+        g2.setColor(oldColor);
+        g2.drawImage(image1, null, 0, 0);
+        g2.drawImage(image2, null, image1.getWidth()+offset, 0);
+        g2.dispose();
+        return newImage;
 	}
 }

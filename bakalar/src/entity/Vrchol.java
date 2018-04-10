@@ -38,6 +38,7 @@ public class Vrchol {
 	
 	Color color;
 	int thic;
+	static int thickness = 10;
 	
 
 	public Vrchol(int x, int y, String nazev, String popis, BufferedImage img, Color color) {
@@ -49,7 +50,7 @@ public class Vrchol {
 		this.komponenta = 0;
 		this.navstiveno = false;
 		this.color = color;
-		this.thic = 10;
+		this.thic = thickness;
 	}
 
 	public Vrchol(int id, int x, int y, String nazev, String popis, BufferedImage img, Color color) {
@@ -60,7 +61,7 @@ public class Vrchol {
 		this.popis = popis;
 		this.img = img;
 		this.color = color;
-		this.thic = 10;
+		this.thic = thickness;
 	}
 
 	public int getId() {
@@ -141,6 +142,14 @@ public class Vrchol {
 
 	public void setThickness(int thic) {
 		this.thic = thic;
+	}
+
+	public static int getThicknessAll() {
+		return thickness;
+	}
+
+	public static void setThicknessAll(int thic) {
+		thickness = thic;
 	}
 
 	public void paint(Graphics2D g, Vrchol m) {

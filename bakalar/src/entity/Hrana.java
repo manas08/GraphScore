@@ -15,6 +15,7 @@ public class Hrana {
 	public List<Hrana> list = new ArrayList<Hrana>();
 	int stroke;
 	Color color;
+	static int strokeall = 4;
 
 	public Hrana() {
 	}
@@ -24,7 +25,7 @@ public class Hrana {
 		this.druhy = druhy;
 		prvni.stupen();
 		druhy.stupen();
-		this.stroke = 4;
+		this.stroke = strokeall;
 		this.color = color;
 	}
 
@@ -60,6 +61,14 @@ public class Hrana {
 
 	public void setStroke(int stroke) {
 		this.stroke = stroke;
+	}
+
+	public static int getStrokeAll() {
+		return strokeall;
+	}
+
+	public static void setStrokeAll(int stroke) {
+		strokeall = stroke;
 	}
 
 	public Color getColor() {

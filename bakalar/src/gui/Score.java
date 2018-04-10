@@ -54,7 +54,7 @@ public class Score extends JPanel {
 	Vrchol v1;
 	Main hlavni;
 	ToolBar tb;
-	private int sirka = 1136;
+	private int sirka = 1080;
 	private int vyska = 856;
 	int hran = 0;
 	int vrcholu = 0;
@@ -64,8 +64,10 @@ public class Score extends JPanel {
 	boolean opak = false;
 	boolean def = false;
 	boolean prvni = true;
+	boolean step = true;
 	boolean alternativni = true;
 	Integer[] cisla;
+	Integer[] stepPomoc;
 	List<Vrchol> puvod = new ArrayList<Vrchol>();
 	MouseListener ml;
 	Steps steps;
@@ -73,7 +75,7 @@ public class Score extends JPanel {
 	public Score(JButton score, Main main) {
 		panel = new JPanel();
 		mapaservice = new MemMapaService();
-		image = new BufferedImage(sirka + 10, vyska + 10, BufferedImage.TYPE_INT_RGB);
+		image = new BufferedImage(sirka + 10, vyska + 20, BufferedImage.TYPE_INT_RGB);
 		btNewScore = new JButton("Zadat skóre");
 		btAlternative = new JButton("Alternativní graf");
 		btSteps = new JButton("Rozbor skóre");
@@ -118,8 +120,37 @@ public class Score extends JPanel {
 				if (SwingUtilities.isLeftMouseButton(e) && pomoc == true) {
 					clear();
 					v1 = mapaservice.getPodleId(poradi);
-					v1.setX(e.getX());
-					v1.setY(e.getY());
+					// ošetøení rohù abychom nekreslili body mimo okno
+					if (e.getX() < 0 && e.getY() < 0) {
+						v1.setX(0);
+						v1.setY(0);
+					} else if (e.getX() < 0 && e.getY() > vyska+10) {
+						v1.setX(0);
+						v1.setY(vyska+10);
+					} else if (e.getX() > sirka + 10 && e.getY() > vyska+10) {
+						v1.setX(sirka + 10);
+						v1.setY(vyska+10);
+					} else if (e.getX() > sirka + 10 && e.getY() < 0) {
+						v1.setX(sirka + 10);
+						v1.setY(0);
+						// ošetøení hran
+					} else if (e.getX() < 0) {
+						v1.setX(0);
+						v1.setY(e.getY());
+					} else if (e.getX() > sirka + 10) {
+						v1.setX(sirka + 10);
+						v1.setY(e.getY());
+					} else if (e.getY() < 0) {
+						v1.setX(e.getX());
+						v1.setY(0);
+					} else if (e.getY() > vyska+10) {
+						v1.setX(e.getX());
+						v1.setY(vyska+10);
+						// uvnitø okna
+					} else {
+						v1.setX(e.getX());
+						v1.setY(e.getY());
+					}
 					present();
 				}
 
@@ -203,6 +234,7 @@ public class Score extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				step = true;
 				getMapaservice().smazList();
 				if (opak == true) {
 					hrana.delete();
@@ -233,15 +265,23 @@ public class Score extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (step) {
+					stepPomoc = cisla;
+					step = false;
+				}
+				cisla = new Integer[stepPomoc.length];
+				for (int i = 0; i < stepPomoc.length; i++) {
+					cisla[i] = stepPomoc[i];
+				}
 				steps = new Steps();
 				steps.write(cisla);
 			}
 		});
 
 		// ------Umístìní tlaèítek--------
-		btNewScore.setBounds(40, 425, 120, 25);
-		btAlternative.setBounds(40, 465, 120, 25);
-		btSteps.setBounds(40, 505, 120, 25);
+		btNewScore.setBounds(40, 400, 120, 25);
+		btAlternative.setBounds(40, 450, 120, 25);
+		btSteps.setBounds(40, 500, 120, 25);
 
 		vytvorGUI();
 	}
@@ -264,6 +304,7 @@ public class Score extends JPanel {
 		euler2.setVisible(true);
 		strom2.setVisible(true);
 		komp2.setVisible(true);
+		btSteps.setVisible(true);
 
 		if (prvni == true) {
 			pnlTlacitka.add(btNewScore);
@@ -449,10 +490,10 @@ public class Score extends JPanel {
 
 	// rozdìlení hran mezi vrcholy
 	public void generateEdge2() {
-		Integer[] druhy = new Integer[cisla.length];
-		for (int i = 0; i < cisla.length; i++) {
-			druhy[i] = cisla[i];
-			System.out.println(cisla[i] + "§§§§§§§§§§" + puvod.get(i).getNazev());
+		Integer[] druhy = new Integer[stepPomoc.length];
+		for (int i = 0; i < stepPomoc.length; i++) {
+			druhy[i] = stepPomoc[i];
+			System.out.println(stepPomoc[i] + " §§§§§§§§§§ " + puvod.get(i).getNazev());
 		}
 
 		int prehoz;
@@ -522,6 +563,7 @@ public class Score extends JPanel {
 	public void disablePanel(boolean b) {
 		btNewScore.setVisible(false);
 		btAlternative.setVisible(false);
+		btSteps.setVisible(false);
 		souvisly1.setVisible(b);
 		rovinny1.setVisible(b);
 		euler1.setVisible(b);
@@ -567,72 +609,72 @@ public class Score extends JPanel {
 	public void vytvorGUI() {
 		souvisly1.setBounds(25, 550, 170, 25);
 		souvisly1.setEnabled(false);
-		souvisly1.setDisabledTextColor(new Color(240, 150, 80));
+		souvisly1.setDisabledTextColor(new Color(47, 48, 60));
 		souvisly1.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		souvisly1.setBackground(new Color(47, 48, 60));
+		souvisly1.setBackground(new Color(214, 217, 223));
 		souvisly1.setBorder(null);
 
 		souvisly2.setBounds(150, 550, 35, 25);
 		souvisly2.setEnabled(false);
-		souvisly2.setDisabledTextColor(new Color(80, 250, 240));
+		souvisly2.setDisabledTextColor(new Color(69, 0, 255));
 		souvisly2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		souvisly2.setBackground(new Color(47, 48, 60));
+		souvisly2.setBackground(new Color(214, 217, 223));
 		souvisly2.setBorder(null);
 
 		rovinny1.setBounds(25, 580, 170, 25);
 		rovinny1.setEnabled(false);
-		rovinny1.setDisabledTextColor(new Color(240, 150, 80));
+		rovinny1.setDisabledTextColor(new Color(47, 48, 60));
 		rovinny1.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		rovinny1.setBackground(new Color(47, 48, 60));
+		rovinny1.setBackground(new Color(214, 217, 223));
 		rovinny1.setBorder(null);
 
 		rovinny2.setBounds(150, 580, 35, 25);
 		rovinny2.setEnabled(false);
-		rovinny2.setDisabledTextColor(new Color(80, 250, 240));
+		rovinny2.setDisabledTextColor(new Color(69, 0, 255));
 		rovinny2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		rovinny2.setBackground(new Color(47, 48, 60));
+		rovinny2.setBackground(new Color(214, 217, 223));
 		rovinny2.setBorder(null);
 
 		euler1.setBounds(25, 610, 170, 25);
 		euler1.setEnabled(false);
-		euler1.setDisabledTextColor(new Color(240, 150, 80));
+		euler1.setDisabledTextColor(new Color(47, 48, 60));
 		euler1.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		euler1.setBackground(new Color(47, 48, 60));
+		euler1.setBackground(new Color(214, 217, 223));
 		euler1.setBorder(null);
 
 		euler2.setBounds(150, 610, 35, 25);
 		euler2.setEnabled(false);
-		euler2.setDisabledTextColor(new Color(80, 250, 240));
+		euler2.setDisabledTextColor(new Color(69, 0, 255));
 		euler2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		euler2.setBackground(new Color(47, 48, 60));
+		euler2.setBackground(new Color(214, 217, 223));
 		euler2.setBorder(null);
 
 		strom1.setBounds(25, 640, 170, 25);
 		strom1.setEnabled(false);
-		strom1.setDisabledTextColor(new Color(240, 150, 80));
+		strom1.setDisabledTextColor(new Color(47, 48, 60));
 		strom1.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		strom1.setBackground(new Color(47, 48, 60));
+		strom1.setBackground(new Color(214, 217, 223));
 		strom1.setBorder(null);
 
 		strom2.setBounds(150, 640, 35, 25);
 		strom2.setEnabled(false);
-		strom2.setDisabledTextColor(new Color(80, 250, 240));
+		strom2.setDisabledTextColor(new Color(69, 0, 255));
 		strom2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		strom2.setBackground(new Color(47, 48, 60));
+		strom2.setBackground(new Color(214, 217, 223));
 		strom2.setBorder(null);
 
 		komp1.setBounds(25, 670, 170, 25);
 		komp1.setEnabled(false);
-		komp1.setDisabledTextColor(new Color(240, 150, 80));
+		komp1.setDisabledTextColor(new Color(47, 48, 60));
 		komp1.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		komp1.setBackground(new Color(47, 48, 60));
+		komp1.setBackground(new Color(214, 217, 223));
 		komp1.setBorder(null);
 
 		komp2.setBounds(150, 670, 35, 25);
 		komp2.setEnabled(false);
-		komp2.setDisabledTextColor(new Color(80, 250, 240));
+		komp2.setDisabledTextColor(new Color(69, 0, 255));
 		komp2.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		komp2.setBackground(new Color(47, 48, 60));
+		komp2.setBackground(new Color(214, 217, 223));
 		komp2.setBorder(null);
 		def = true;
 	}

@@ -31,9 +31,11 @@ public class ToolBar extends JFrame {
 	ColorChooser ch;
 	Vrchol v;
 	Main main;
+    int from;
 
 	public ToolBar(Vrchol m, Main main, Hrana hrana, int i) {
 		super("Detaily bodu");
+		this.from=i;
 		this.v = m;
 		this.main = main;
 		setSize(400, 300);
@@ -62,18 +64,20 @@ public class ToolBar extends JFrame {
 					btSmazat.setEnabled(false);
 					
 					// ----když to volá MAIN----
-					if(i == 0){
+					if(from == 0){
 						main.clear();
 						main.present();
 					// ----když to volá SCORE----
-					}else if (i == 1){
+					}else if (from == 1){
 						score.clear();
 						score.present();
 						score.refresh();
-					}else if (i == 2){
+					// ----když to volá IZOM 1.POLE----
+					}else if (from == 2){
 						izo.clear1();
 						izo.present1();
-					}else if (i == 3){
+					// ----když to volá IZOM 2.POLE----
+					}else if (from == 3){
 						izo.clear2();
 						izo.present2();
 					}
@@ -126,8 +130,24 @@ public class ToolBar extends JFrame {
 
 	public void applyColor(Color color) {
 		v.setColor(color);
-		System.out.println(color.getGreen()+ " " + color.getRed() + " " + color.getBlue());
-		main.present();
+		// ----když to volá MAIN----
+		if(from == 0){
+			main.clear();
+			main.present();
+		// ----když to volá SCORE----
+		}else if (from == 1){
+			score.clear();
+			score.present();
+			score.refresh();
+		// ----když to volá IZOM 1.POLE----
+		}else if (from == 2){
+			izo.clear1();
+			izo.present1();
+		// ----když to volá IZOM 2.POLE----
+		}else if (from == 3){
+			izo.clear2();
+			izo.present2();
+		}
 	}
 	
 	public Vrchol getVrchol() {

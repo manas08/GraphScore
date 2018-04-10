@@ -19,7 +19,6 @@ public class JPanelImage extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if (img != null) {
-			System.out.println(g.getColor().toString());
 			g.drawImage(img, 0, 0, null);
 		}
 	}

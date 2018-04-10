@@ -70,11 +70,11 @@ public class Steps extends JFrame {
 			}
 			area.setText(area.getText() + " )");
 
-			System.out.println(area.getText());
+			//System.out.println(area.getText());
 			text = String.valueOf(text + "\n" + area.getText());
 			area.setText(text);
 
-			System.out.println(cisla.length - k - 1 + " " + cisla[cisla.length - k - 1]);
+			//System.out.println(cisla.length - k - 1 + " " + cisla[cisla.length - k - 1]);
 			for (int i = 1; i <= cisla[cisla.length - k - 1]; i++) {
 				cisla[cisla.length - k - (1 + i)]--;
 			}
