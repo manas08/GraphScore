@@ -27,6 +27,7 @@ public class NewScore extends JFrame {
 	Integer[] cisla;
 	int pocet = 0;
 	Hrana hrana;
+	boolean nula = false;
 
 	public NewScore(Score score) {
 		super("Zadat skóre");
@@ -59,12 +60,14 @@ public class NewScore extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				decomposition();
-				if (korekce()) {
-					score.generatePoints(pocet);
-					score.generateEdge(cisla);
-				} else {
-					JOptionPane.showMessageDialog(getNewScore(), "Toto není skóre grafu!!", "Chyba",
-							JOptionPane.ERROR_MESSAGE);
+				if(nula == false) {
+					if (korekce()) {
+						score.generatePoints(pocet);
+						score.generateEdge(cisla);
+					} else {
+						JOptionPane.showMessageDialog(getNewScore(), "Toto není skóre grafu!!", "Chyba",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 
@@ -87,6 +90,7 @@ public class NewScore extends JFrame {
 				c = retezec[1];
 				j = (int) c;
 				if (j == 48) {
+					nula = true;
 					cisla[0] = j;
 					c = retezec[2];
 					j = (int) c;

@@ -255,6 +255,14 @@ public class Score extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				hrana.delete();
 				clear();
+				if (step) {
+					stepPomoc = cisla;
+					step = false;
+				}
+				cisla = new Integer[stepPomoc.length];
+				for (int i = 0; i < stepPomoc.length; i++) {
+					cisla[i] = stepPomoc[i];
+				}
 				generateEdge2();
 				btAlternative.setVisible(false);
 			}
@@ -280,7 +288,7 @@ public class Score extends JPanel {
 
 		// ------Umístìní tlaèítek--------
 		btNewScore.setBounds(40, 400, 120, 25);
-		btAlternative.setBounds(40, 450, 120, 25);
+		btAlternative.setBounds(15, 450, 165, 25);
 		btSteps.setBounds(40, 500, 120, 25);
 
 		vytvorGUI();
@@ -305,6 +313,7 @@ public class Score extends JPanel {
 		strom2.setVisible(true);
 		komp2.setVisible(true);
 		btSteps.setVisible(true);
+		btAlternative.setVisible(true);
 
 		if (prvni == true) {
 			pnlTlacitka.add(btNewScore);
@@ -696,7 +705,7 @@ public class Score extends JPanel {
 
 	private void showAlternative() {
 		for (Integer t : cisla) {
-			if (t == 2) {
+			if (t == 2 && cisla.length > 3) {
 				alternativni = true;
 			} else {
 				alternativni = false;

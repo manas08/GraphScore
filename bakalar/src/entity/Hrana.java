@@ -45,6 +45,22 @@ public class Hrana {
 		this.druhy = druhy;
 		Hrana hran = new Hrana(prvni, this.druhy, color);
 		list.add(hran);
+		boolean pokracovani = true;
+		for (int i = 0; i < prvni.sousedi.size(); i++) {
+			if (prvni.sousedi.get(i).getNazev() == prvni.nazev) {
+				pokracovani = false;
+			}
+		}
+		if(pokracovani)
+			prvni.sousedi.add(druhy);
+		pokracovani = true;
+		for (int i = 0; i < druhy.sousedi.size(); i++) {
+			if (druhy.sousedi.get(i).getNazev() == druhy.nazev) {
+				pokracovani = false;
+			}
+		}
+		if(pokracovani)
+			druhy.sousedi.add(prvni);
 	}
 
 	public List<Hrana> getList() {
@@ -54,7 +70,7 @@ public class Hrana {
 	public void setList(List<Hrana> list) {
 		this.list = list;
 	}
-
+	
 	public int getStroke() {
 		return stroke;
 	}
@@ -102,5 +118,17 @@ public class Hrana {
 		}
 		list.clear();
 		list = l;
+	}
+	
+	public void deleteHranu(Hrana h) {
+		List<Hrana> l = new ArrayList<>();
+
+		for (int w = 0; w < list.size(); w++) {
+			if (list.get(w).prvni.nazev != h.prvni.nazev && list.get(w).druhy.nazev != h.druhy.nazev) {
+				l.add(h);
+			} 
+			list.clear();
+			list = l;
+		}
 	}
 }

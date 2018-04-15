@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import tools.ColorChooser;
 
@@ -31,11 +33,13 @@ public class Vrchol {
 	public int stupen = 0;
 	public int komponenta;
 	public boolean navstiveno;
+	public boolean prozkoumano;
 
 	// Body pro vytvoreni hrany
 	protected Vrchol prvni;
 	protected Vrchol druhy;
-	
+	public List<Vrchol> sousedi = new ArrayList<Vrchol>();
+
 	Color color;
 	int thic;
 	static int thickness = 10;
@@ -64,6 +68,10 @@ public class Vrchol {
 		this.thic = thickness;
 	}
 
+	public List<Vrchol> getSousedi() {
+		return sousedi;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -78,6 +86,14 @@ public class Vrchol {
 
 	public void setNavstiveno(boolean navstiveno) {
 		this.navstiveno = navstiveno;
+	}
+
+	public boolean getProzkoumano() {
+		return prozkoumano;
+	}
+
+	public void setProzkoumano(boolean prozkoumano) {
+		this.prozkoumano = prozkoumano;
 	}
 	
 	public int getKomponent() {

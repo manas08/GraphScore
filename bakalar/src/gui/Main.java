@@ -3,6 +3,7 @@ package gui;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -23,6 +24,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +101,7 @@ public class Main extends JFrame {
 	JButton btNotes = new JButton("Poznámka");
 	List<JButton> btns = new ArrayList<>();
 	JButton btSave = new JButton();
+	JButton btWord = new JButton("Návod");
 
 	public Main() {
 		super("GraphScore 2.0");
@@ -229,6 +232,7 @@ public class Main extends JFrame {
 				} else if (btScore.isEnabled() == false) {
 					podm = false;
 					score.present();
+					score.setFeatures();
 				}
 			}
 		});
@@ -639,6 +643,19 @@ public class Main extends JFrame {
 			}
 		});
 
+		btWord.setPreferredSize(new Dimension(170, 25));
+		btWord.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Desktop dt = Desktop.getDesktop();
+			    try {
+					dt.open(new File("doc/guide.docx"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
 		// navigace
 		btSave.setBounds(160, 4, 30, 30);
 		panel1.add(btSave);
@@ -656,7 +673,7 @@ public class Main extends JFrame {
 		btBarvaH.setBounds(160, 280, 20, 20);
 		panel1.add(btBarvaH);
 
-		hrany.setBounds(20, 15, 170, 25);
+		hrany.setBounds(20, 5, 170, 25);
 		hrany.setEnabled(false);
 		hrany.setDisabledTextColor(new Color(47, 48, 60));
 		hrany.setFont(new Font("Times New Roman", Font.BOLD, 20));
@@ -664,7 +681,7 @@ public class Main extends JFrame {
 		hrany.setBorder(null);
 		panel2.add(hrany);
 
-		vrcholy.setBounds(20, 50, 170, 25);
+		vrcholy.setBounds(20, 40, 170, 25);
 		vrcholy.setEnabled(false);
 		vrcholy.setDisabledTextColor(new Color(47, 48, 60));
 		vrcholy.setFont(new Font("Times New Roman", Font.BOLD, 20));
@@ -720,8 +737,10 @@ public class Main extends JFrame {
 		btFeatures.setBounds(15, 710, 165, 25);
 		pnlTlacitka.add(btFeatures);
 
-		btNotes.setBounds(40, 88, 120, 20);
+		btNotes.setBounds(40, 73, 120, 20);
 		panel2.add(btNotes);
+		btWord.setBounds(40, 93, 120, 20);
+		panel2.add(btWord);
 
 		panel1.setBackground(new Color(199, 202, 208));
 		panel1.setBounds(2, 2, 196, 331);
@@ -733,10 +752,10 @@ public class Main extends JFrame {
 		pnlTlacitka.add(panel2);
 		pnlTlacitka.add(panel1);
 		add(pnlTlacitka, "East");
-
+		
 		pack();
 	}
-
+	
 	public void vykresliHranu() {
 		Graphics2D gr = image.createGraphics();
 
@@ -754,9 +773,9 @@ public class Main extends JFrame {
 			Vrchol m = mapaservice.getVrchol().get(i);
 			m.paint(gr, m);
 		}
-
 		hran = hrana.getList().size();
 		vrcholu = mapaservice.getVrchol().size();
+
 		setCounts(hran, vrcholu);
 		graphScore();
 		features.main(cisla, mapaservice, hrana);
@@ -775,7 +794,6 @@ public class Main extends JFrame {
 		vykresliHranu();
 		if (pnlMapa.getGraphics() != null)
 			pnlMapa.getGraphics().drawImage(image, 0, 0, null);
-
 	}
 
 	public void clear() {

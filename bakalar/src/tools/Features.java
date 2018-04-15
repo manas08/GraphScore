@@ -26,11 +26,20 @@ public class Features {
 		this.mapaservice = mapaservice;
 		this.hrana=hrana;
 		int podil = podil(cisla);
-		rovinny = jeRovinny(cisla, podil);
-		euler = jeEuler(cisla);
-		komponent = pocetKomponent(cisla);
-		souvisly = jeSouvisly();
-		strom = jeStrom(cisla, podil);
+
+		if(mapaservice.getVrchol().size() !=0) {
+			rovinny = jeRovinny(cisla, podil);
+			euler = jeEuler(cisla);
+			komponent = pocetKomponent(cisla);
+			souvisly = jeSouvisly();
+			strom = jeStrom(cisla, podil);
+		}else {
+			rovinny = false;
+			euler = false;
+			komponent = 0;
+			souvisly = false;
+			strom = false;
+		}
 	}
 
 	// ------ Rovinnost -------

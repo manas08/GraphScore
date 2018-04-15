@@ -7,9 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import entity.Vrchol;
@@ -42,7 +47,6 @@ public class NewVertex extends JFrame {
 
 	public NewVertex(Main main, Izomorfism izo, int which) {
 		super("Nový vrchol");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(450, 250);
 		setResizable(false);
 		
@@ -64,11 +68,38 @@ public class NewVertex extends JFrame {
 		tfStav.setEditable(false);
 
 		pack();
+		
+		WindowListener exitListener = new WindowAdapter() {
+
+		    @Override
+		    public void windowClosing(WindowEvent e) {
+				dispose();
+				tfText1.removeAll();
+				
+				pomocna = true; //
+				if(which==1) {
+					main.vykresliHranu();
+					main.clear();
+					main.present();
+				} else if(which==2) {
+					izo.vykresliHranu1();
+					izo.clear1();
+					izo.present1();
+				} else if(which==3) {
+					izo.vykresliHranu2();
+					izo.clear2();
+					izo.present2();
+				} 
+		    }
+		};
+		this.addWindowListener(exitListener);
 
 		btZavrit.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				tfText1.removeAll();
+				
 				pomocna = true; //
 				if(which==1) {
 					main.vykresliHranu();
