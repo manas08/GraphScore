@@ -124,12 +124,12 @@ public class Score extends JPanel {
 					if (e.getX() < 0 && e.getY() < 0) {
 						v1.setX(0);
 						v1.setY(0);
-					} else if (e.getX() < 0 && e.getY() > vyska+10) {
+					} else if (e.getX() < 0 && e.getY() > vyska + 10) {
 						v1.setX(0);
-						v1.setY(vyska+10);
-					} else if (e.getX() > sirka + 10 && e.getY() > vyska+10) {
+						v1.setY(vyska + 10);
+					} else if (e.getX() > sirka + 10 && e.getY() > vyska + 10) {
 						v1.setX(sirka + 10);
-						v1.setY(vyska+10);
+						v1.setY(vyska + 10);
 					} else if (e.getX() > sirka + 10 && e.getY() < 0) {
 						v1.setX(sirka + 10);
 						v1.setY(0);
@@ -143,9 +143,9 @@ public class Score extends JPanel {
 					} else if (e.getY() < 0) {
 						v1.setX(e.getX());
 						v1.setY(0);
-					} else if (e.getY() > vyska+10) {
+					} else if (e.getY() > vyska + 10) {
 						v1.setX(e.getX());
-						v1.setY(vyska+10);
+						v1.setY(vyska + 10);
 						// uvnitø okna
 					} else {
 						v1.setX(e.getX());
@@ -171,7 +171,6 @@ public class Score extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println("score");
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
 						vrchol = mapaservice.getVrchol().get(i);
@@ -228,7 +227,8 @@ public class Score extends JPanel {
 		panel.addMouseMotionListener(mouse);
 		panel.addMouseListener(ml);
 
-		// -------Tlaèítka---------
+		// -------Funkce tlaèítek---------
+		// nové zadání
 		btNewScore.setPreferredSize(new Dimension(170, 25));
 		btNewScore.addActionListener(new ActionListener() {
 
@@ -248,6 +248,7 @@ public class Score extends JPanel {
 			}
 		});
 
+		// alternativní graf
 		btAlternative.setPreferredSize(new Dimension(170, 25));
 		btAlternative.addActionListener(new ActionListener() {
 
@@ -268,6 +269,7 @@ public class Score extends JPanel {
 			}
 		});
 
+		// krokování skóre
 		btSteps.setPreferredSize(new Dimension(170, 25));
 		btSteps.addActionListener(new ActionListener() {
 
@@ -364,7 +366,6 @@ public class Score extends JPanel {
 	// metoda pro vykreslení
 	public void present() {
 		vykresliHranu();
-		// if (panel.getGraphics() != null)
 		panel.getGraphics().drawImage(image, 0, 0, null);
 	}
 
@@ -387,7 +388,8 @@ public class Score extends JPanel {
 					double angle = 2 * Math.PI * i / vrcholy;
 					x = (int) Math.round((sirka / 2) + 300 * Math.cos(angle));
 					y = (int) Math.round((vyska / 2) + 300 * Math.sin(angle));
-					mapaservice.pridejVrchol(new Vrchol(x, y, String.valueOf(alphabet[i]), " ", null, new Color(0, 0, 0)));
+					mapaservice
+							.pridejVrchol(new Vrchol(x, y, String.valueOf(alphabet[i]), " ", null, new Color(0, 0, 0)));
 				}
 			} else if (vrcholy == 1) {
 				mapaservice.pridejVrchol(new Vrchol(sirka / 2, vyska / 2, "A", " ", null, new Color(0, 0, 0)));
@@ -407,7 +409,7 @@ public class Score extends JPanel {
 		return mapaservice;
 	}
 
-	// rozdìlení hran mezi vrcholy
+	// rozdìlení hran mezi vrcholy do hloubky
 	public void generateEdge(Integer[] cisla) {
 		puvod.clear();
 		this.cisla = cisla;
@@ -421,7 +423,6 @@ public class Score extends JPanel {
 		List<Vrchol> vrch = mapaservice.getVrchol();
 		for (int i = 0; i < mapaservice.getVrchol().size(); i++) {
 			puvod.add(mapaservice.getVrchol().get(i));
-			System.out.println("****************" + mapaservice.getVrchol().get(i).getNazev() + " " + mapaservice.getVrchol().get(i).getId());
 		}
 		for (Vrchol vrchol : vrch) {
 			vrchol.saveID();
@@ -452,16 +453,16 @@ public class Score extends JPanel {
 				for (Vrchol vrchol : mapaservice.getVrchol()) {
 					vrchol.setID2();
 				}
-				
+
 				// seøazení listu pro korektní další poèítání
-				Collections.sort(mapaservice.getVrchol(),new Comparator<Vrchol>() {
+				Collections.sort(mapaservice.getVrchol(), new Comparator<Vrchol>() {
 
 					@Override
 					public int compare(Vrchol v1, Vrchol v2) {
-		                return v1.getId() - v2.getId();
+						return v1.getId() - v2.getId();
 					}
-			    });
-				
+				});
+
 				refresh();
 				btSteps.setVisible(true);
 				showAlternative();
@@ -471,7 +472,6 @@ public class Score extends JPanel {
 			for (int j = 1 + i; j <= vybrane + i; j++) {
 				hrana.setDruhy(mapaservice.getVrchol().get(j), new Color(165, 49, 68));
 				druhy[j] -= 1;
-				System.out.println(vybrane + " " + druhy[j]);
 			}
 
 			i++;
@@ -482,27 +482,26 @@ public class Score extends JPanel {
 		for (Vrchol vrchol : mapaservice.getVrchol()) {
 			vrchol.setID2();
 		}
-		
+
 		// seøazení listu pro korektní další poèítání
-		Collections.sort(mapaservice.getVrchol(),new Comparator<Vrchol>() {
+		Collections.sort(mapaservice.getVrchol(), new Comparator<Vrchol>() {
 
 			@Override
 			public int compare(Vrchol v1, Vrchol v2) {
-                return v1.getId() - v2.getId();
+				return v1.getId() - v2.getId();
 			}
-	    });
-		
+		});
+
 		refresh();
 		btSteps.setVisible(true);
 		showAlternative();
 	}
 
-	// rozdìlení hran mezi vrcholy
+	// rozdìlení hran mezi vrcholy do šíøky
 	public void generateEdge2() {
 		Integer[] druhy = new Integer[stepPomoc.length];
 		for (int i = 0; i < stepPomoc.length; i++) {
 			druhy[i] = stepPomoc[i];
-			System.out.println(stepPomoc[i] + " §§§§§§§§§§ " + puvod.get(i).getNazev());
 		}
 
 		int prehoz;
@@ -519,7 +518,7 @@ public class Score extends JPanel {
 						prehoz = druhy[j1];
 						druhy[j1] = druhy[j2];
 						druhy[j2] = prehoz;
-						pomocny = mapaservice.getVrchol().get(j1);
+						pomocny = puvod.get(j1);
 
 						puvod.set(j1, puvod.get(j2));
 						puvod.get(j2).setId(j1 + 1);
@@ -529,30 +528,62 @@ public class Score extends JPanel {
 				}
 			}
 
-			for (int i = 0; i < druhy.length - 1; i++) {
-				if (druhy[i] == 0 || druhy[i + 1] == 0) {
-					present();
-					refresh();
-					podm = true;
-
+			if (druhy[0] == 0) {
+				podm = true;
+				continue;
+			} else {
+				// když tato metoda nelze aplikovat na skóre (radikálnì nezmìní jeho vzhled)
+				// vykreslíme pùvodní graf
+				int soucet = 0;
+				for (int i = 1; i < druhy.length; i++) {
+					soucet += druhy[i];
+				}
+				if (druhy[0] > soucet) {
 					for (Vrchol vrchol : puvod) {
 						vrchol.setID2();
 					}
+					hrana.delete();
+					generateEdge(stepPomoc);
 					return;
-				} else {
+				}
+			}
 
-					j = i + 1;
+			// vytvoøíme hranu po obvodu a pak následnì spojujeme vrcholy mezi sebou køížem
+			int p = 0;
+			int kreslit = 0;
+			for (int i = 0; i < druhy.length - 1; i++) {
+				j = i + 1;
+				if (kreslit == 2)
+					j += p;
+				kreslit = 1;
+				for (int k = 0; k < hrana.getList().size(); k++) {
+					// porovnávání hran, zda již existují
+					if ((puvod.get(i).getNazev() == hrana.getList().get(k).getPrvni().getNazev()
+							&& puvod.get(j).getNazev() == hrana.getList().get(k).getDruhy().getNazev())
+							|| (puvod.get(i).getNazev() == hrana.getList().get(k).getDruhy().getNazev()
+									&& puvod.get(j).getNazev() == hrana.getList().get(k).getPrvni().getNazev())) {
+						kreslit = 2;
+					}
+				}
+				if (kreslit == 1) {
 					hrana.setPrvni(puvod.get(i));
 					hrana.setDruhy(puvod.get(j), new Color(165, 49, 68));
-
 					druhy[i] -= 1;
 					druhy[j] -= 1;
-					i++;
-					if (druhy[i] == 0) {
-						i = druhy.length;
-					}
+				} else {
+					p++;
 					i--;
 				}
+
+				i++;
+				if (druhy[j] == 0) {
+					i = druhy.length;
+					continue;
+				}
+				if (druhy[i] == 0) {
+					i = druhy.length;
+				}
+				i--;
 			}
 		}
 		present();
@@ -709,10 +740,9 @@ public class Score extends JPanel {
 				alternativni = true;
 			} else {
 				alternativni = false;
-				btAlternative.setVisible(alternativni);
-				return;
 			}
+			btAlternative.setVisible(true);
+			return;
 		}
-		btAlternative.setVisible(alternativni);
 	}
 }

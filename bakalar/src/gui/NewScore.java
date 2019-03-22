@@ -48,7 +48,7 @@ public class NewScore extends JFrame {
 
 		pnlSouth.add(btZavrit = (new JButton("Zavøít")));
 
-		// -------Tlaèítka-------
+		// -------Funkce tlaèítek-------
 		btZavrit.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -60,7 +60,7 @@ public class NewScore extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				decomposition();
-				if(nula == false) {
+				if (nula == false) {
 					if (korekce()) {
 						score.generatePoints(pocet);
 						score.generateEdge(cisla);
@@ -74,6 +74,7 @@ public class NewScore extends JFrame {
 		});
 	}
 
+	// kontrola formátu zadaného skóre
 	public void decomposition() {
 		char[] retezec = tfNazevVrcholu.getText().toCharArray();
 		char c;

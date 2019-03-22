@@ -24,8 +24,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -119,6 +117,8 @@ public class Izomorfism extends JPanel {
 		});
 
 		// táhnutí bodů
+
+		// p1 značí plátno 1, p2 plátno 2
 		mouse = new MouseAdapter() {
 
 			@Override
@@ -231,17 +231,19 @@ public class Izomorfism extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if(pocet == 1) {
-				if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p1) {
-					int citlivost = 9;
-					int porovnej = 0;
+				if (pocet == 1) {
+					if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p1) {
+						int citlivost = 9;
+						int porovnej = 0;
 						for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
 							Vrchol m = mapaservice1.getVrchol().get(i);
-							if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
-	
+							if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+									&& (((m.getX() - citlivost) <= e.getX())
+											&& (((m.getX() + citlivost) >= e.getX())))) {
+
 								if (hrana1.getPrvni() != m) {
 									if (hrana1.getList().size() != 0) {
-	
+
 										for (int j = 0; j < hrana1.getList().size(); j++) {// prohledáme
 																							// všechny
 																							// hrany
@@ -264,13 +266,13 @@ public class Izomorfism extends JPanel {
 											hrana1.setDruhy(m, color);
 											pocet = 0;
 										}
-	
+
 									} else {
 										hrana1.setDruhy(m, color);
 										pocet = 0;
 									}
 								}
-	
+
 							}
 						}
 						clear();
@@ -280,11 +282,13 @@ public class Izomorfism extends JPanel {
 						int porovnej = 0;
 						for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
 							Vrchol m = mapaservice2.getVrchol().get(i);
-							if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY())) && (((m.getX() - citlivost) <= e.getX()) && (((m.getX() + citlivost) >= e.getX())))) {
-	
+							if (((m.getY() - citlivost) <= e.getY()) && (((m.getY() + citlivost) >= e.getY()))
+									&& (((m.getX() - citlivost) <= e.getX())
+											&& (((m.getX() + citlivost) >= e.getX())))) {
+
 								if (hrana2.getPrvni() != m) {
 									if (hrana2.getList().size() != 0) {
-	
+
 										for (int j = 0; j < hrana2.getList().size(); j++) {// prohledáme
 																							// všechny
 																							// hrany
@@ -307,22 +311,22 @@ public class Izomorfism extends JPanel {
 											hrana2.setDruhy(m, color);
 											pocet = 0;
 										}
-	
+
 									} else {
 										hrana2.setDruhy(m, color);
 										pocet = 0;
 									}
 								}
-	
+
 							}
 						}
 						clear();
 						present();
-				}
-				pomoc = false;
+					}
+					pomoc = false;
 				}
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int citlivost = 9;
@@ -331,32 +335,38 @@ public class Izomorfism extends JPanel {
 					for (int i = 0; i < mapaservice1.getVrchol().size(); i++) {
 						vrchol = mapaservice1.getVrchol().get(i);
 
-						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY())) && (((vrchol.getX() - citlivost) <= e.getX()) && (((vrchol.getX() + citlivost) >= e.getX())))) {
+						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY()))
+								&& (((vrchol.getX() - citlivost) <= e.getX())
+										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							hrana1.setPrvni(vrchol);
 							vrchol2 = hrana1.getPrvni();
 							mys1X = e.getX();
 							mys1Y = e.getY();
 							pocet = 1;
-						}else {
-							chyba+=1;
+						} else {
+							chyba += 1;
 						}
-					}if(chyba == mapaservice1.getVrchol().size()) {
+					}
+					if (chyba == mapaservice1.getVrchol().size()) {
 						pocet = 0;
 					}
-				}else if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p2) {
+				} else if (e.getButton() == MouseEvent.BUTTON1 && e.getSource() == p2) {
 					for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
 						vrchol = mapaservice2.getVrchol().get(i);
 
-						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY())) && (((vrchol.getX() - citlivost) <= e.getX()) && (((vrchol.getX() + citlivost) >= e.getX())))) {
+						if (((vrchol.getY() - citlivost) <= e.getY()) && (((vrchol.getY() + citlivost) >= e.getY()))
+								&& (((vrchol.getX() - citlivost) <= e.getX())
+										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							hrana2.setPrvni(vrchol);
 							vrchol2 = hrana2.getPrvni();
 							mys1X = e.getX();
 							mys1Y = e.getY();
 							pocet = 1;
-						}else {
-							chyba+=1;
+						} else {
+							chyba += 1;
 						}
-					}if(chyba == mapaservice1.getVrchol().size()) {
+					}
+					if (chyba == mapaservice2.getVrchol().size()) {
 						pocet = 0;
 					}
 				} else if (SwingUtilities.isMiddleMouseButton(e) && e.getSource() == p1) {
@@ -368,7 +378,13 @@ public class Izomorfism extends JPanel {
 										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							poradi = vrchol.getId();
 							pomoc = true;
+						} else {
+							chyba++;
 						}
+					}
+					if (chyba == mapaservice1.getVrchol().size()) {
+						pocet = 0;
+						pomoc = false;
 					}
 				} else if (SwingUtilities.isMiddleMouseButton(e) && e.getSource() == p2) {
 					for (int i = 0; i < mapaservice2.getVrchol().size(); i++) {
@@ -379,7 +395,13 @@ public class Izomorfism extends JPanel {
 										&& (((vrchol.getX() + citlivost) >= e.getX())))) {
 							poradi = vrchol.getId();
 							pomoc = true;
+						} else {
+							chyba++;
 						}
+					}
+					if (chyba == mapaservice2.getVrchol().size()) {
+						pocet = 0;
+						pomoc = false;
 					}
 				}
 
@@ -445,7 +467,8 @@ public class Izomorfism extends JPanel {
 		p2.addMouseMotionListener(mouse);
 		p2.addMouseListener(ml);
 
-		// -------Tlačítka---------
+		// -------Funkce tlačítek---------
+		// přidat vrchol
 		btNewVertex.setPreferredSize(new Dimension(170, 25));
 		btNewVertex.addActionListener(new ActionListener() {
 
@@ -465,7 +488,8 @@ public class Izomorfism extends JPanel {
 				o.setVisible(true);
 			}
 		});
-		
+
+		// nový graf
 		btNewGraph.setPreferredSize(new Dimension(170, 25));
 		btNewGraph.addActionListener(new ActionListener() {
 
@@ -483,20 +507,34 @@ public class Izomorfism extends JPanel {
 			}
 		});
 
+		// odstranění všech hran
 		btDelHrany.setPreferredSize(new Dimension(170, 25));
 		btDelHrany.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				if (graphs == false) {
 					hrana1.delete();
+					MapaService mapaservice3 = new MemMapaService();
+					for (Vrchol v : mapaservice1.getVrchol()) {
+						mapaservice3.pridejVrchol(new Vrchol(v.getX(), v.getY(), v.getNazev(), v.getPopis(), null, v.getColor()));
+					}
+					mapaservice1 = new MemMapaService();
+					mapaservice1 = mapaservice3;
 				} else if (graphs == true) {
 					hrana2.delete();
+					MemMapaService mapaservice3 = new MemMapaService();
+					for (Vrchol v : mapaservice2.getVrchol()) {
+						mapaservice3.pridejVrchol(new Vrchol(v.getX(), v.getY(), v.getNazev(), v.getPopis(), null, v.getColor()));
+					}
+					mapaservice2 = new MemMapaService();
+					mapaservice2 = mapaservice3;
 				}
 				clear();
 				present();
 			}
 		});
 
+		// odstranění hrany
 		btDelHranu.setPreferredSize(new Dimension(170, 25));
 		btDelHranu.addActionListener(new ActionListener() {
 
@@ -512,328 +550,222 @@ public class Izomorfism extends JPanel {
 				}
 			}
 		});
-		
+
+		// testování izomorfismu
 		btStejne.setPreferredSize(new Dimension(170, 25));
 		btStejne.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				boolean pokracuj = false;
-				if(mapaservice1.getVrchol().size() == mapaservice2.getVrchol().size() && hrana1.getList().size() == hrana2.getList().size()) {
+				System.out.println(mapaservice1.getVrchol().size() + " " + mapaservice2.getVrchol().size());
+				if(mapaservice1.getVrchol().size() > 0 || mapaservice2.getVrchol().size() > 0) {
+				if (mapaservice1.getVrchol().size() == mapaservice2.getVrchol().size()
+						&& hrana1.getList().size() == hrana2.getList().size()) {
 					pokracuj = true;
 				} else
 					pokracuj = false;
-				
-			if(pokracuj) {
 
-				int prehoz;
-				List<Vrchol> vrch1 = mapaservice1.getVrchol();
-				Integer[] druhy1 = new Integer[vrch1.size()];
-				for (int i = 0; i < vrch1.size(); i++) {
-					 druhy1[i] = vrch1.get(i).getStupen();
-				}
-				for (int j = 0; j < druhy1.length - 1; j++) {
-					for (int j2 = j + 1; j2 < druhy1.length; j2++) {
-						if (druhy1[j] < druhy1[j2]) {
-							Vrchol pomocny;
-							prehoz = druhy1[j];
-							druhy1[j] = druhy1[j2];
-							druhy1[j2] = prehoz;
-							pomocny = mapaservice1.getVrchol().get(j);
+				if (pokracuj) {
 
-							vrch1.set(j, vrch1.get(j2));
-							vrch1.get(j2).setId(j + 1);
-							vrch1.set(j2, pomocny);
-							pomocny.setId(j2 + 1);
+					int prehoz;
+					List<Vrchol> vrch1 = mapaservice1.getVrchol();
+					Integer[] druhy1 = new Integer[vrch1.size()];
+					for (int i = 0; i < vrch1.size(); i++) {
+						druhy1[i] = vrch1.get(i).getStupen();
+					}
+					for (int j = 0; j < druhy1.length - 1; j++) {
+						for (int j2 = j + 1; j2 < druhy1.length; j2++) {
+							if (druhy1[j] < druhy1[j2]) {
+								Vrchol pomocny;
+								prehoz = druhy1[j];
+								druhy1[j] = druhy1[j2];
+								druhy1[j2] = prehoz;
+								pomocny = mapaservice1.getVrchol().get(j);
+
+								vrch1.set(j, vrch1.get(j2));
+								vrch1.get(j2).setId(j + 1);
+								vrch1.set(j2, pomocny);
+								pomocny.setId(j2 + 1);
+							}
 						}
 					}
-				}
-				
-				List<Vrchol> vrch2 = mapaservice2.getVrchol();
-				Integer[] druhy2 = new Integer[vrch2.size()];
-				for (int i = 0; i < vrch2.size(); i++) {
-					 druhy2[i] = vrch2.get(i).getStupen();
-				}
-				for (int j = 0; j < druhy2.length - 1; j++) {
-					for (int j2 = j + 1; j2 < druhy2.length; j2++) {
-						if (druhy2[j] < druhy2[j2]) {
-							Vrchol pomocny;
-							prehoz = druhy2[j];
-							druhy2[j] = druhy2[j2];
-							druhy2[j2] = prehoz;
-							pomocny = mapaservice2.getVrchol().get(j);
 
-							vrch2.set(j, vrch2.get(j2));
-							vrch2.get(j2).setId(j + 1);
-							vrch2.set(j2, pomocny);
-							pomocny.setId(j2 + 1);
+					List<Vrchol> vrch2 = mapaservice2.getVrchol();
+					Integer[] druhy2 = new Integer[vrch2.size()];
+					for (int i = 0; i < vrch2.size(); i++) {
+						druhy2[i] = vrch2.get(i).getStupen();
+					}
+					for (int j = 0; j < druhy2.length - 1; j++) {
+						for (int j2 = j + 1; j2 < druhy2.length; j2++) {
+							if (druhy2[j] < druhy2[j2]) {
+								Vrchol pomocny;
+								prehoz = druhy2[j];
+								druhy2[j] = druhy2[j2];
+								druhy2[j2] = prehoz;
+								pomocny = mapaservice2.getVrchol().get(j);
+
+								vrch2.set(j, vrch2.get(j2));
+								vrch2.get(j2).setId(j + 1);
+								vrch2.set(j2, pomocny);
+								pomocny.setId(j2 + 1);
+							}
 						}
 					}
-				}
-				
-				for (int i = 0; i < druhy1.length; i++) {
-					if(druhy1[i] != druhy2[i]) {
-						JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-						return;
-					}
-				}
-				
-				for (Vrchol vrchol : vrch1) {
-					System.out.print(vrchol.getStupen());
-				}
-				System.out.println("");
-				System.out.println("-----------------------");
-				for (Vrchol vrchol : vrch2) {
-					System.out.print(vrchol.getStupen());
-				}
-				System.out.println("");
 
-				// vše ok až na nejspíš špatný spoj ID-Název vrcholu
-				// když chci přetáhnout bod jinam beru jiný bod
-				//proto možná nefunguje u některých grafů porovnání
-				
-				
-				// druhy vrchol z hrany musí mít stejný stupen jako u druheho grafu
-				int shod = 0;
-				
-				if(druhy1[0] == 0) {
-					boolean nuly = true;
 					for (int i = 0; i < druhy1.length; i++) {
-						if(druhy1[i] != druhy2[i]) {
-							nuly = false;
-						}
-					}
-					if(nuly == true)
-						System.out.println("HOVNO");	
-					else
-						JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-					
-				}else {
-					int del = 0;
-					features1 = new Features();
-					features1.main(druhy1, mapaservice1, hrana1);
-					int p1 = features1.getKomponent();
-					features2 = new Features();
-					features2.main(druhy2, mapaservice2, hrana2);
-					int p2 = features2.getKomponent();
-					System.out.println(p1 + " " + p2 + " KOMPONENTY");					
-					if(p1 != p2) {
-						JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-						return;
-					}else {
-
-						for (Vrchol v1 : vrch1) {
-							v1.navstiveno = false;
-							v1.prozkoumano = false;
-							for (int i = 0; i < v1.getSousedi().size(); i++) {
-								System.out.println(v1.getSousedi().get(i).getNazev() + " je soused " + v1.getNazev());
-							}
-						}
-						for (Vrchol v2 : vrch2) {
-							v2.navstiveno = false;
-							v2.prozkoumano = false;
-						}
-						System.out.println();
-						int vrcholy = 0;
-
-						for (int i = 0; i < vrch1.size(); i++) {
-							for (int k = 0; k < vrch2.size(); k++) {
-								if (vrch1.get(i).navstiveno == false && vrch2.get(k).navstiveno == false) {
-									for (Vrchol v1: vrch1.get(i).getSousedi()) {
-										v1.setProzkoumano(false);
-									}
-									for (Vrchol v1: vrch2.get(k).getSousedi()) {
-										v1.setProzkoumano(false);
-									}
-									int uspechu = 0;
-									System.out.println(vrch1.get(i).getNazev() + " vrcholy " + vrch2.get(k).getNazev());
-									if (vrch2.get(k).getStupen() == vrch1.get(i).getStupen()) {
-										for (int j = 0; j < vrch1.get(i).getSousedi().size(); j++) {
-											int count = 0;
-											int soucet = 0;
-											for (int l = 0; l < vrch2.get(k).getSousedi().size(); l++) {
-												System.out.println(vrch1.get(i).getSousedi().get(j).getNazev() + " porovnavajici vrcholy " + vrch2.get(k).getSousedi().get(l).getNazev());
-												//System.out.println(vrch1.get(i).getSousedi().get(j).getNazev() + " nazev " + vrch2.get(k).getSousedi().get(l).getProzkoumano() + " 1 " + vrch2.get(k).getSousedi().get(l).getNazev());
-												if ((vrch1.get(i).getSousedi().get(j).getStupen() == vrch2.get(k).getSousedi().get(l).getStupen()) && (vrch2.get(k).getSousedi().get(l).getProzkoumano() == false)) {
-													count++;
-													vrch2.get(k).navstiveno = true;
-													vrch2.get(k).getSousedi().get(l).setProzkoumano(true);
-												}
-											}
-											int chyby = 0;
-											for (int h = 0; h<vrch2.get(k).getSousedi().size(); h++) {
-												//System.out.println(vrch2.get(k).getSousedi().get(h).getProzkoumano() + " 2 " + vrch2.get(k).getSousedi().get(h).getNazev());
-												if (vrch2.get(k).getSousedi().get(h).getProzkoumano() == true) {
-													chyby++;
-												}
-											}
-											if ((chyby == vrch2.get(k).getSousedi().size() && count ==0) || (count == 0 && soucet ==0)) {
-												JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-												return;
-											}
-											soucet++;
-											System.out.println(count + " " + vrch1.get(i).getSousedi().size() + " porovnani");
-											System.out.println();
-											if (count != 0) {
-												uspechu ++;
-												for (int l = 0; l < vrch2.get(k).getSousedi().size(); l++) {
-													vrch2.get(k).getSousedi().get(l).setProzkoumano(false);
-												}
-											}else {
-												j--;
-											}
-										}
-									}
-									System.out.println(uspechu + " " + vrch1.size() + " porovnani----------------");
-									System.out.println();
-									if (uspechu == vrch1.get(i).getSousedi().size()) {
-										vrcholy++;
-										vrch1.get(i).navstiveno = true;
-									}else
-										continue;
-								}
-							}
-						}
-
-
-						System.out.println(vrcholy + " pocet " );
-						if (vrcholy == vrch1.size()) {
-							System.out.println("uspech");
-
-							int kruznice1 = 0;
-
-							for (int i = 0; i < vrch1.size(); i++) {
-								for (int j = 0; j < vrch1.get(i).getSousedi().size()-1; j++) {
-									for (int k = j; k < vrch1.get(i).getSousedi().size(); k++) {
-										for (Vrchol v : vrch1.get(i).getSousedi().get(j).getSousedi()) {
-											if (v.getNazev() == vrch1.get(i).getSousedi().get(k).getNazev()) {
-												kruznice1++;
-											}
-										}
-									}
-								}
-							}
-
-							int kruznice2 = 0;
-
-							for (int i = 0; i < vrch2.size(); i++) {
-								for (int j = 0; j < vrch2.get(i).getSousedi().size()-1; j++) {
-									for (int k = j; k < vrch2.get(i).getSousedi().size(); k++) {
-										for (Vrchol v : vrch2.get(i).getSousedi().get(j).getSousedi()) {
-											if (v.getNazev() == vrch2.get(i).getSousedi().get(k).getNazev()) {
-												kruznice2++;
-											}
-										}
-									}
-								}
-							}
-							System.out.println(kruznice1 + " kruznice " + kruznice2);
-							if (kruznice1 == kruznice2) {
-								JOptionPane.showMessageDialog(null, "Grafy jsou izomorfní.", "Izomorfismus", 1);
-								return;
-							}else {
-								JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-								return;
-							}
-						}else {
+						if (druhy1[i] != druhy2[i]) {
 							JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
 							return;
 						}
-						
-						
-						
-						
-						/*for (int i = 0; i < druhy1.length; i++) {
-							System.out.println();
-							for (int j = 0; j < druhy2.length; j++) {
-								System.out.println(druhy1[i] + " " + druhy2[j] + " -------------");
-								if(druhy1[i] == druhy2[j]) {*/
-									/*for (Hrana hr1 : hrana1.getList()) {
-										boolean opakovani = true;
-										while (opakovani) {
-										for (Hrana hr2 : hrana2.getList()) {
-											if(opakovani == false)
-												continue;
-											System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   prvni");
-											System.out.println(hr2.getPrvni().getNazev() + " " + hr2.getDruhy().getNazev() + "   druhy");
-												//if(vrch1.get(i).getNazev() == hr1.getPrvni().getNazev()) {
-													if((hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen() && hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen())) {
-														if(hr2.getPrvni().getNavstiveno() == false) {
-															hr2.getPrvni().setNavstiveno(true);
-															System.out.println();
-															shod++;
-															hr2.deleteHranu(hr2);
-															opakovani = false;
-															continue;
-														}
-													} else if((hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen() && hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen())) {
-														if(hr2.getDruhy().getNavstiveno() == false) {
-															hr2.getDruhy().setNavstiveno(true);
-															System.out.println();
-															shod++;
-															hr2.deleteHranu(hr2);
-															opakovani = false;
-															continue;
-														}
-													}
-												//} else if( vrch1.get(i).getNazev() == hr1.getDruhy().getNazev()) {
-													if((hr1.getDruhy().getStupen() == hr2.getPrvni().getStupen() && hr1.getPrvni().getStupen() == hr2.getDruhy().getStupen())) {
-														if(hr2.getPrvni().getNavstiveno() == false) {
-															hr2.getPrvni().setNavstiveno(true);
-															System.out.println();
-															shod++;
-															hr2.deleteHranu(hr2);
-															opakovani = false;
-															continue;
-														}
-													}else if(hr1.getDruhy().getStupen() == hr2.getDruhy().getStupen() && hr1.getPrvni().getStupen() == hr2.getPrvni().getStupen()){
-														if(hr2.getDruhy().getNavstiveno() == false) {
-															hr2.getDruhy().setNavstiveno(true);
-															System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + "   prvni");
-															System.out.println(hr2.getPrvni().getNazev() + " " + hr2.getDruhy().getNazev() + "   druhy");
-															System.out.println();
-															shod++;
-															hr2.deleteHranu(hr2);
-															opakovani = false;
-															continue;
-														}
-													} 
-												//}
-											}
-										if(opakovani == true){
-											System.out.println(hr1.getPrvni().getNazev() + " " + hr1.getDruhy().getNazev() + " nenalezeno");
-											JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-											return;
+					}
+
+					if (druhy1[0] == 0) {
+						boolean nuly = true;
+						for (int i = 0; i < druhy1.length; i++) {
+							if (druhy1[i] != druhy2[i]) {
+								nuly = false;
+							}
+						}
+						if (nuly == true)
+							JOptionPane.showMessageDialog(null, "Grafy jsou izomorfní.", "Izomorfismus", 1);
+						else
+							JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+
+					} else {
+
+						// porovnání počtu komponent
+						features1 = new Features();
+						features1.main(druhy1, mapaservice1, hrana1);
+						int p1 = features1.getKomponent();
+						features2 = new Features();
+						features2.main(druhy2, mapaservice2, hrana2);
+						int p2 = features2.getKomponent();
+						if (p1 != p2) {
+							JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+							return;
+						} else {
+
+							for (Vrchol v1 : vrch1) {
+								v1.navstiveno = false;
+								v1.prozkoumano = false;
+							}
+							for (Vrchol v2 : vrch2) {
+								v2.navstiveno = false;
+								v2.prozkoumano = false;
+							}
+
+							int vrcholy = 0;
+
+							// porovnávání stupňů sousedních vrcholů
+							for (int i = 0; i < vrch1.size(); i++) {
+								for (int k = 0; k < vrch2.size(); k++) {
+									if (vrch1.get(i).navstiveno == false && vrch2.get(k).navstiveno == false) {
+										for (Vrchol v1 : vrch1.get(i).getSousedi()) {
+											v1.setProzkoumano(false);
 										}
+										for (Vrchol v1 : vrch2.get(k).getSousedi()) {
+											v1.setProzkoumano(false);
+										}
+										int uspechu = 0;
+
+										if (vrch2.get(k).getStupen() == vrch1.get(i).getStupen()) {
+											for (int j = 0; j < vrch1.get(i).getSousedi().size(); j++) {
+												int count = 0;
+												int soucet = 0;
+
+												for (int l = 0; l < vrch2.get(k).getSousedi().size(); l++) {
+													if ((vrch1.get(i).getSousedi().get(j).getStupen() == vrch2.get(k)
+															.getSousedi().get(l).getStupen())
+															&& (vrch2.get(k).getSousedi().get(l)
+																	.getProzkoumano() == false)) {
+														count++;
+														vrch2.get(k).getSousedi().get(l).setProzkoumano(true);
+														l = vrch1.get(i).getSousedi().size();
+													}
+												}
+
+												int chyby = 0;
+												for (int h = 0; h < vrch2.get(k).getSousedi().size(); h++) {
+													if (vrch2.get(k).getSousedi().get(h).getProzkoumano() == true) {
+														chyby++;
+													}
+												}
+												if ((chyby == vrch2.get(k).getSousedi().size() && count == 0)) {
+													JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.1",
+															"Izomorfismus", 1);
+													return;
+												}
+												soucet++;
+												if (count != 0) {
+													uspechu++;
+													for (int l = 0; l < vrch2.get(k).getSousedi().size(); l++) {
+														vrch2.get(k).getSousedi().get(l).setProzkoumano(false);
+													}
+												} else {
+													continue;
+												}
+											}
+										}
+
+										if (uspechu == vrch1.get(i).getSousedi().size()) {
+											vrcholy++;
+											vrch1.get(i).navstiveno = true;
+										} else
+											continue;
+									}
+								}
+							}
+							if (vrcholy == vrch1.size()) {
+
+								// počítání kružnic v plátně 1
+								int kruznice1 = 0;
+
+								for (int i = 0; i < vrch1.size(); i++) {
+									for (int j = 0; j < vrch1.get(i).getSousedi().size() - 1; j++) {
+										for (int k = j; k < vrch1.get(i).getSousedi().size(); k++) {
+											for (Vrchol v : vrch1.get(i).getSousedi().get(j).getSousedi()) {
+												if (v.getNazev() == vrch1.get(i).getSousedi().get(k).getNazev()) {
+													kruznice1++;
+												}
+											}
 										}
 									}
-								/*}
+								}
+
+								// počítání kružnic v plátně 2
+								int kruznice2 = 0;
+
+								for (int i = 0; i < vrch2.size(); i++) {
+									for (int j = 0; j < vrch2.get(i).getSousedi().size() - 1; j++) {
+										for (int k = j; k < vrch2.get(i).getSousedi().size(); k++) {
+											for (Vrchol v : vrch2.get(i).getSousedi().get(j).getSousedi()) {
+												if (v.getNazev() == vrch2.get(i).getSousedi().get(k).getNazev()) {
+													kruznice2++;
+												}
+											}
+										}
+									}
+								}
+
+								// porovnání počtu kružnic velikosti 3
+								if (kruznice1 == kruznice2) {
+									JOptionPane.showMessageDialog(null, "Grafy jsou izomorfní.2", "Izomorfismus", 1);
+									return;
+								} else {
+									JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.3", "Izomorfismus", 1);
+									return;
+								}
+							} else {
+								JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.4", "Izomorfismus", 1);
+								return;
 							}
 						}
 					}
-					// u 1 hrany 3 * 1 + 2
-					// u 2 hran 3 * 2 + 4 ????
-					
-					
-					// nedělat přes shody ..ale když nenajdeme další sousední vrchol nebo ten sousední vrchol nebude mít shodný stupen tak už izomorfní nejsou
-					
-					//funguje jen ne pro 2,2,2,2,2,2
-					/*XXXfor (int i = 0; i < druhy1.length; i++) {
-						del += druhy1[i];
-					}
-					for (Vrchol vrchol : vrch2) {
-						vrchol.setNavstiveno(false);
-					}
-					System.out.println(shod + " " + del/2 + " shody");
-					//if(shod == del/2) {
-						JOptionPane.showMessageDialog(null, "Grafy jsou izomorfní.", "Izomorfismus", 1);
-					//} else {
-					//	JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
-					//}
-					XXX*/
-				}}
-				
+
+				} else
+					JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.5", "Izomorfismus", 1);
 			} else
-				JOptionPane.showMessageDialog(null, "Grafy nejsou izomorfní.", "Izomorfismus", 1);
+				JOptionPane.showMessageDialog(null, "Oba grafy jsou prázdné.", "Izomorfismus", 1);
 			}
 		});
 
@@ -867,14 +799,12 @@ public class Izomorfism extends JPanel {
 		mapaservice1.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null, new Color(0, 0, 0)));
 		mapaservice1.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null, new Color(0, 0, 0)));
 		mapaservice1.pridejVrchol(new Vrchol(160, 507, "C", "Budova FIM J", null, new Color(0, 0, 0)));
-		mapaservice1.pridejVrchol(new Vrchol(50, 405, "D", "Budova B", null, new Color(0, 0, 0)));
-		mapaservice1.pridejVrchol(new Vrchol(220, 115, "E", "Budova FIM J", null, new Color(0, 0, 0)));
-		
+		mapaservice1.pridejVrchol(new Vrchol(220, 115, "D", "Budova FIM J", null, new Color(0, 0, 0)));
+
 		mapaservice2.pridejVrchol(new Vrchol(100, 235, "A", "Budova PDF A", null, new Color(0, 0, 0)));
 		mapaservice2.pridejVrchol(new Vrchol(392, 304, "B", "Budova B", null, new Color(0, 0, 0)));
 		mapaservice2.pridejVrchol(new Vrchol(160, 507, "C", "Budova FIM J", null, new Color(0, 0, 0)));
-		mapaservice2.pridejVrchol(new Vrchol(50, 405, "D", "Budova B", null, new Color(0, 0, 0)));
-		mapaservice2.pridejVrchol(new Vrchol(220, 115, "E", "Budova FIM J", null, new Color(0, 0, 0)));
+		mapaservice2.pridejVrchol(new Vrchol(220, 115, "D", "Budova FIM J", null, new Color(0, 0, 0)));
 		p3.add(p1, "East");
 		p3.add(p2, "West");
 	}
@@ -917,7 +847,7 @@ public class Izomorfism extends JPanel {
 		clear();
 	}
 
-	// samotné vykreslení bodů a hran
+	// samotné vykreslení bodů a hran na plátně 1
 	public void vykresliHranu1() {
 		Graphics2D gr = image1.createGraphics();
 
@@ -948,7 +878,7 @@ public class Izomorfism extends JPanel {
 		gr.drawString("Počet vrcholů:  " + "  " + vrcholu1, 30, 840);
 	}
 
-	// samotné vykreslení bodů a hran
+	// samotné vykreslení bodů a hran na plátně 2
 	public void vykresliHranu2() {
 		Graphics2D gr = image2.createGraphics();
 
@@ -1059,23 +989,24 @@ public class Izomorfism extends JPanel {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	
+
+	// spojení obou pláten pro jejich jednotné uložení jako obrázku
 	public BufferedImage spojeni() {
-	 	int offset  = 5;
-        int wid = image1.getWidth()+image2.getWidth()+offset;
-        int height = Math.max(image1.getHeight(),image2.getHeight())+offset;
-        //create a new buffer and draw two image into the new image
-        BufferedImage newImage = new BufferedImage(wid,height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = newImage.createGraphics();
-        Color oldColor = g2.getColor();
-        //fill background
-        g2.setPaint(new Color(242, 242, 242));
-        g2.fillRect(0, 0, wid, height);
-        //draw image
-        g2.setColor(oldColor);
-        g2.drawImage(image1, null, 0, 0);
-        g2.drawImage(image2, null, image1.getWidth()+offset, 0);
-        g2.dispose();
-        return newImage;
+		int offset = 5;
+		int wid = image1.getWidth() + image2.getWidth() + offset;
+		int height = Math.max(image1.getHeight(), image2.getHeight()) + offset;
+		BufferedImage newImage = new BufferedImage(wid, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = newImage.createGraphics();
+		Color oldColor = g2.getColor();
+
+		// vykreslení pozadí
+		g2.setPaint(new Color(242, 242, 242));
+		g2.fillRect(0, 0, wid, height);
+		// vykreslení pláten
+		g2.setColor(oldColor);
+		g2.drawImage(image1, null, 0, 0);
+		g2.drawImage(image2, null, image1.getWidth() + offset, 0);
+		g2.dispose();
+		return newImage;
 	}
 }

@@ -10,11 +10,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import entity.Vrchol;
@@ -49,7 +47,7 @@ public class NewVertex extends JFrame {
 		super("Nový vrchol");
 		setSize(450, 250);
 		setResizable(false);
-		
+
 		getContentPane().add(pnlNorth, "North");
 		getContentPane().add(pnlCenter, "Center");
 		getContentPane().add(pnlSouth, "South");
@@ -68,52 +66,53 @@ public class NewVertex extends JFrame {
 		tfStav.setEditable(false);
 
 		pack();
-		
+
 		WindowListener exitListener = new WindowAdapter() {
 
-		    @Override
-		    public void windowClosing(WindowEvent e) {
+			@Override
+			public void windowClosing(WindowEvent e) {
 				dispose();
 				tfText1.removeAll();
-				
+
 				pomocna = true; //
-				if(which==1) {
+				if (which == 1) {
 					main.vykresliHranu();
 					main.clear();
 					main.present();
-				} else if(which==2) {
+				} else if (which == 2) {
 					izo.vykresliHranu1();
 					izo.clear1();
 					izo.present1();
-				} else if(which==3) {
+				} else if (which == 3) {
 					izo.vykresliHranu2();
 					izo.clear2();
 					izo.present2();
-				} 
-		    }
+				}
+			}
 		};
 		this.addWindowListener(exitListener);
 
+		// -------Funkce tlaèítek-------
 		btZavrit.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				tfText1.removeAll();
-				
+
 				pomocna = true; //
-				if(which==1) {
+				if (which == 1) {
 					main.vykresliHranu();
 					main.clear();
 					main.present();
-				} else if(which==2) {
+				} else if (which == 2) {
 					izo.vykresliHranu1();
 					izo.clear1();
 					izo.present1();
-				} else if(which==3) {
+				} else if (which == 3) {
 					izo.vykresliHranu2();
 					izo.clear2();
 					izo.present2();
-				} 
+				}
 			}
 		});
 
@@ -126,7 +125,7 @@ public class NewVertex extends JFrame {
 				tfText1.setEditable(false);
 				btPozice.setVisible(false);
 				main.toFront();
-				
+
 				urciPolohu();
 			};
 		});
@@ -208,7 +207,7 @@ public class NewVertex extends JFrame {
 	public void setMapaService(MapaService mapaservice) {
 		this.mapaservice2 = mapaservice;
 	}
-	
+
 	public Color getColor() {
 		return color;
 	}

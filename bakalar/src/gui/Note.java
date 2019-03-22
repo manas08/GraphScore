@@ -7,16 +7,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class Note extends JFrame{
+public class Note extends JFrame {
 
 	JTextArea area = new JTextArea();
-	
+
 	public Note() {
 		super("Poznámka");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setPreferredSize(new Dimension(400, 200));
 		setSize(400, 200);
-		
 
 		vytvorGui();
 
@@ -36,9 +35,9 @@ public class Note extends JFrame{
 		add(leva, BorderLayout.LINE_START);
 		JPanel prava = new JPanel();
 		add(prava, BorderLayout.LINE_END);
-		
+
 		leva.setBackground(area.getBackground());
 		prava.setBackground(area.getBackground());
 	}
-	
+
 }

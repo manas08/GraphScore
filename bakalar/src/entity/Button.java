@@ -6,9 +6,10 @@ public class Button {
 	JButton btn;
 	int id;
 
+	// náše vlastní tlaèítko
 	public Button(JButton btn, int id) {
-		this.btn=btn;
-		this.id=id;
+		this.btn = btn;
+		this.id = id;
 	}
 
 	public JButton getBtn() {
@@ -26,6 +27,5 @@ public class Button {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
+
 }

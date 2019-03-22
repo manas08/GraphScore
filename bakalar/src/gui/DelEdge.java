@@ -25,7 +25,6 @@ public class DelEdge extends JFrame {
 		setResizable(true);
 	}
 
-	// ********************************
 	public void delete(Hrana hrana, Main main, Izomorfism izo, int w) {
 		List<JButton> buttons = new ArrayList<>();
 		JLabel uvod = new JLabel("Vyberte hranu k odstranìní:     ");
@@ -36,6 +35,7 @@ public class DelEdge extends JFrame {
 		JPanel pnl = new JPanel();
 		pnl.setLayout(null);
 
+		// každá hrana má svoje tlaèítko pro smazání
 		for (int i = 0; i < hrana.getList().size(); i++) {
 
 			Button btn = new Button(new JButton("X"), i);
@@ -54,9 +54,9 @@ public class DelEdge extends JFrame {
 							hrana.getList().get(w).getDruhy().setStupen();
 						}
 					}
-					if(w==0)
+					if (w == 0)
 						main.vykresliHranu(listPom);
-					else if(w==1)
+					else if (w == 1)
 						izo.vykresliHranu(listPom);
 					setVisible(false);
 					dispose();

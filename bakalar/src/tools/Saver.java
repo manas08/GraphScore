@@ -31,13 +31,11 @@ public class Saver {
 			File f = null;
 
 			try {
-				f = new File(file+ "." + fileChooser.getFileFilter().getDescription());
+				f = new File(file + "." + fileChooser.getFileFilter().getDescription());
 				ImageIO.write(img, fileChooser.getFileFilter().getDescription(), f);
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.out.println("Chyba pøi ukládání obrázku");
 			}
-			System.out.println("Obrázek uložen     " + " umístìní: " + file + "    velikost: " + f.length() / 1000 + " kilobajtù");
 		}
 	}
 }

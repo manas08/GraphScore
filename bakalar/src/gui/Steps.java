@@ -3,13 +3,9 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
-import entity.Vrchol;
-import javafx.scene.input.KeyCode;
 
 public class Steps extends JFrame {
 
@@ -46,6 +42,7 @@ public class Steps extends JFrame {
 		prava.setBackground(area.getBackground());
 	}
 
+	// vypsání rozboru skóre do textfieldu
 	public void write(Integer[] cisla) {
 		boolean podm = true;
 		int k = 0;
@@ -70,11 +67,9 @@ public class Steps extends JFrame {
 			}
 			area.setText(area.getText() + " )");
 
-			//System.out.println(area.getText());
 			text = String.valueOf(text + "\n" + area.getText());
 			area.setText(text);
 
-			//System.out.println(cisla.length - k - 1 + " " + cisla[cisla.length - k - 1]);
 			for (int i = 1; i <= cisla[cisla.length - k - 1]; i++) {
 				cisla[cisla.length - k - (1 + i)]--;
 			}

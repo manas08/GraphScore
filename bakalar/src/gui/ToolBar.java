@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -31,11 +30,11 @@ public class ToolBar extends JFrame {
 	ColorChooser ch;
 	Vrchol v;
 	Main main;
-    int from;
+	int from;
 
 	public ToolBar(Vrchol m, Main main, Hrana hrana, int i) {
 		super("Detaily bodu");
-		this.from=i;
+		this.from = i;
 		this.v = m;
 		this.main = main;
 		setSize(400, 300);
@@ -57,27 +56,28 @@ public class ToolBar extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int vysledek;
-				vysledek = JOptionPane.showConfirmDialog(null, "Smazat bod: " + nazevBodu + "?", "OK", JOptionPane.YES_NO_OPTION);
+				vysledek = JOptionPane.showConfirmDialog(null, "Smazat bod: " + nazevBodu + "?", "OK",
+						JOptionPane.YES_NO_OPTION);
 
 				if (vysledek == JOptionPane.YES_OPTION) {
 					mapaservice.smazVrchol(tbID, hrana);
 					btSmazat.setEnabled(false);
-					
+
 					// ----když to volá MAIN----
-					if(from == 0){
+					if (from == 0) {
 						main.clear();
 						main.present();
-					// ----když to volá SCORE----
-					}else if (from == 1){
+						// ----když to volá SCORE----
+					} else if (from == 1) {
 						score.clear();
 						score.present();
 						score.refresh();
-					// ----když to volá IZOM 1.POLE----
-					}else if (from == 2){
+						// ----když to volá IZOM 1.POLE----
+					} else if (from == 2) {
 						izo.clear1();
 						izo.present1();
-					// ----když to volá IZOM 2.POLE----
-					}else if (from == 3){
+						// ----když to volá IZOM 2.POLE----
+					} else if (from == 3) {
 						izo.clear2();
 						izo.present2();
 					}
@@ -85,15 +85,14 @@ public class ToolBar extends JFrame {
 				}
 			}
 		});
-		
-		
+
 		pnl2.add(btBarva = (new JButton("<html><font size=3>Zmìnit barvu bodu</font></html>")));
 		btBarva.setPreferredSize(new Dimension(200, 25));
 		btBarva.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						ch.createAndShowGUI();
@@ -117,13 +116,13 @@ public class ToolBar extends JFrame {
 	}
 
 	public void score(Score sc) {
-		this.score=sc;
+		this.score = sc;
 	}
 
 	public void izo(Izomorfism iz) {
-		this.izo=iz;
+		this.izo = iz;
 	}
-	
+
 	public ToolBar getThis() {
 		return this;
 	}
@@ -131,25 +130,25 @@ public class ToolBar extends JFrame {
 	public void applyColor(Color color) {
 		v.setColor(color);
 		// ----když to volá MAIN----
-		if(from == 0){
+		if (from == 0) {
 			main.clear();
 			main.present();
-		// ----když to volá SCORE----
-		}else if (from == 1){
+			// ----když to volá SCORE----
+		} else if (from == 1) {
 			score.clear();
 			score.present();
 			score.refresh();
-		// ----když to volá IZOM 1.POLE----
-		}else if (from == 2){
+			// ----když to volá IZOM 1.POLE----
+		} else if (from == 2) {
 			izo.clear1();
 			izo.present1();
-		// ----když to volá IZOM 2.POLE----
-		}else if (from == 3){
+			// ----když to volá IZOM 2.POLE----
+		} else if (from == 3) {
 			izo.clear2();
 			izo.present2();
 		}
 	}
-	
+
 	public Vrchol getVrchol() {
 		return v;
 	}

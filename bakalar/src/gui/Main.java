@@ -1,10 +1,8 @@
 package gui;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -27,20 +25,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
-
-import com.sun.webkit.ColorChooser;
-
 import entity.Hrana;
 import entity.Vrchol;
 import tools.Features;
@@ -53,8 +46,8 @@ public class Main extends JFrame {
 	private MapaService mapaservice = new MemMapaService();;
 	private JPanel pnlMapa;
 	JPanel pnlTlacitka = new JPanel();
-	private int sirka = 1080;
-	private int vyska = 856;
+	private int sirka = 1480;
+	private int vyska = 956;
 	public static Main main;
 	public int pocet = 2;
 	public Hrana hrana = new Hrana();
@@ -112,9 +105,9 @@ public class Main extends JFrame {
 		setSize(sirka + 200, vyska);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		setResizable(false);
+		setResizable(true);
 		pack();
-		image = new BufferedImage(sirka+10, vyska + 20, BufferedImage.TYPE_INT_RGB);
+		image = new BufferedImage(sirka + 10, vyska + 20, BufferedImage.TYPE_INT_RGB);
 		clear();
 		btns.add(btHome);
 		btns.add(btIzomor);
@@ -151,6 +144,7 @@ public class Main extends JFrame {
 		mapaservice.pridejVrchol(new Vrchol(600, 320, "C", "Budova C", null, new Color(0, 0, 0)));
 		mapaservice.pridejVrchol(new Vrchol(464, 507, "D", "Budova FIM J", null, new Color(0, 0, 0)));
 
+		// pøekreslování plochy pøi pohybu okna
 		addComponentListener(new ComponentListener() {
 
 			@Override
@@ -236,6 +230,7 @@ public class Main extends JFrame {
 				}
 			}
 		});
+
 		pnlMapa.addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
@@ -277,7 +272,6 @@ public class Main extends JFrame {
 						}
 					}
 					if (chyba == mapaservice.getVrchol().size()) {
-						System.out.println("wdwdwddwd");
 						poradi = -1;
 					}
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
@@ -383,12 +377,12 @@ public class Main extends JFrame {
 						if (e.getX() < 0 && e.getY() < 0) {
 							v1.setX(0);
 							v1.setY(0);
-						} else if (e.getX() < 0 && e.getY() > vyska+10) {
+						} else if (e.getX() < 0 && e.getY() > vyska + 10) {
 							v1.setX(0);
-							v1.setY(vyska+10);
-						} else if (e.getX() > sirka + 10 && e.getY() > vyska+10) {
+							v1.setY(vyska + 10);
+						} else if (e.getX() > sirka + 10 && e.getY() > vyska + 10) {
 							v1.setX(sirka + 10);
-							v1.setY(vyska+10);
+							v1.setY(vyska + 10);
 						} else if (e.getX() > sirka + 10 && e.getY() < 0) {
 							v1.setX(sirka + 10);
 							v1.setY(0);
@@ -402,9 +396,9 @@ public class Main extends JFrame {
 						} else if (e.getY() < 0) {
 							v1.setX(e.getX());
 							v1.setY(0);
-						} else if (e.getY() > vyska+10) {
+						} else if (e.getY() > vyska + 10) {
 							v1.setX(e.getX());
-							v1.setY(vyska+10);
+							v1.setY(vyska + 10);
 							// uvnitø okna
 						} else {
 							v1.setX(e.getX());
@@ -426,6 +420,8 @@ public class Main extends JFrame {
 		btBarvaV.setBackground(new Color(0, 0, 0));
 		btBarvaH.setBackground(new Color(165, 49, 68));
 
+		// ------Funkce tlaèítek------
+		// kreslení grafu
 		btHome.addMouseMotionListener(new MouseMotionListener() {
 
 			@Override
@@ -443,6 +439,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// nový graf
 		btSmaz.setPreferredSize(new Dimension(170, 25));
 		btSmaz.addActionListener(new ActionListener() {
 
@@ -456,6 +453,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// pøidat vrchol
 		btPridat.setPreferredSize(new Dimension(170, 25));
 		btPridat.addActionListener(new ActionListener() {
 
@@ -469,6 +467,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// odstranit hrany
 		btDelHrany.setPreferredSize(new Dimension(170, 25));
 		btDelHrany.addActionListener(new ActionListener() {
 
@@ -480,6 +479,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// odstranit hranu
 		btDelHranu.setPreferredSize(new Dimension(170, 25));
 		btDelHranu.addActionListener(new ActionListener() {
 
@@ -490,6 +490,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// vlastnosti grafu
 		btFeatures.setPreferredSize(new Dimension(170, 25));
 		btFeatures.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -509,6 +510,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// izomorfismus
 		btIzomor.setPreferredSize(new Dimension(170, 25));
 		btIzomor.addActionListener(new ActionListener() {
 
@@ -526,6 +528,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// upravit vzhled grafu
 		btColor.setPreferredSize(new Dimension(170, 25));
 		btColor.addActionListener(new ActionListener() {
 
@@ -541,6 +544,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// kreslení grafu
 		disableBTN(btHome);
 		btHome.setPreferredSize(new Dimension(170, 25));
 		btHome.addActionListener(new ActionListener() {
@@ -561,6 +565,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// kreslit podle skóre
 		btScore.setPreferredSize(new Dimension(170, 25));
 		btScore.addActionListener(new ActionListener() {
 
@@ -579,6 +584,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// nastavit výchozí barvu vrcholù
 		btBarvaV.setPreferredSize(new Dimension(20, 20));
 		btBarvaV.addActionListener(new ActionListener() {
 
@@ -596,6 +602,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// nastavit výchozí barvu hran
 		btBarvaH.setPreferredSize(new Dimension(20, 20));
 		btBarvaH.addActionListener(new ActionListener() {
 
@@ -611,6 +618,7 @@ public class Main extends JFrame {
 			}
 		});
 
+		// poznámka
 		btNotes.setPreferredSize(new Dimension(170, 25));
 		btNotes.addActionListener(new ActionListener() {
 
@@ -628,6 +636,7 @@ public class Main extends JFrame {
 			System.out.println(ex);
 		}
 
+		// uložit obrázek grafu
 		btSave.setPreferredSize(new Dimension(30, 30));
 		btSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -643,11 +652,12 @@ public class Main extends JFrame {
 			}
 		});
 
+		// návod
 		btWord.setPreferredSize(new Dimension(170, 25));
 		btWord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Desktop dt = Desktop.getDesktop();
-			    try {
+				try {
 					dt.open(new File("doc/guide.docx"));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -673,6 +683,7 @@ public class Main extends JFrame {
 		btBarvaH.setBounds(160, 280, 20, 20);
 		panel1.add(btBarvaH);
 
+		// umístìní komponent
 		hrany.setBounds(20, 5, 170, 25);
 		hrany.setEnabled(false);
 		hrany.setDisabledTextColor(new Color(47, 48, 60));
@@ -752,10 +763,10 @@ public class Main extends JFrame {
 		pnlTlacitka.add(panel2);
 		pnlTlacitka.add(panel1);
 		add(pnlTlacitka, "East");
-		
+
 		pack();
 	}
-	
+
 	public void vykresliHranu() {
 		Graphics2D gr = image.createGraphics();
 
@@ -798,7 +809,7 @@ public class Main extends JFrame {
 
 	public void clear() {
 		Graphics gr = image.getGraphics();
-		gr.setColor(new Color(242,242,242));
+		gr.setColor(new Color(242, 242, 242));
 		gr.fillRect(0, 0, image.getWidth(), image.getHeight());
 	}
 
@@ -840,12 +851,6 @@ public class Main extends JFrame {
 	}
 
 	public void setFeatures(Integer[] cisla, JTextField[] btn) {
-
-		for (Hrana hr : hrana.getList()) {
-			// System.out.println(hr.getPrvni().getNazev() + " " + hr.getDruhy().getNazev()
-			// + "TOTO");
-		}
-
 		if (features.isSouvisly())
 			btn[1].setText("ANO");
 		else
