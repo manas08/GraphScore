@@ -46,7 +46,7 @@ public class Main extends JFrame {
 	private MapaService mapaservice = new MemMapaService();;
 	private JPanel pnlMapa;
 	JPanel pnlTlacitka = new JPanel();
-	private int sirka = 1480;
+	private int sirka = 1380;
 	private int vyska = 956;
 	public static Main main;
 	public int pocet = 2;
